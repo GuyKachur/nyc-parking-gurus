@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Parking` (
   CONSTRAINT `ViolationKey2`
     FOREIGN KEY (`ParkingPK`)
     REFERENCES `mydb`.`Violation` (`ViolationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
   CONSTRAINT `fk_Trips_User`
     FOREIGN KEY (`User_UserID`)
     REFERENCES `mydb`.`User` (`UserPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -103,8 +103,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Destination` (
   CONSTRAINT `fk_Destination_Trips1`
     FOREIGN KEY (`Trips_tripID`)
     REFERENCES `mydb`.`Trip` (`TripPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -130,8 +130,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Event` (
   CONSTRAINT `DestinationKey5`
     FOREIGN KEY (`EventPK`)
     REFERENCES `mydb`.`Destination` (`DestinationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -159,8 +159,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`AirBNB` (
   CONSTRAINT `DestinationKey4`
     FOREIGN KEY (`AirBNBPK`)
     REFERENCES `mydb`.`Destination` (`DestinationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -185,8 +185,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Park` (
   CONSTRAINT `DestinationKey1`
     FOREIGN KEY (`ParkPK`)
     REFERENCES `mydb`.`Destination` (`DestinationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -225,8 +225,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Business` (
   CONSTRAINT `DestinationKey2`
     FOREIGN KEY (`BusinessPK`)
     REFERENCES `mydb`.`Destination` (`DestinationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -250,8 +250,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Collision` (
   CONSTRAINT `ViolationKey1`
     FOREIGN KEY (`CollisionPK`)
     REFERENCES `mydb`.`Violation` (`ViolationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -296,8 +296,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vocational` (
   CONSTRAINT `DestinationKey6`
     FOREIGN KEY (`VocationalPK`)
     REFERENCES `mydb`.`Destination` (`DestinationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -326,6 +326,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Point_of_Interest` (
   CONSTRAINT `DestinationKey3`
     FOREIGN KEY (`Point_of_InterestPK`)
     REFERENCES `mydb`.`Destination` (`DestinationPK`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
