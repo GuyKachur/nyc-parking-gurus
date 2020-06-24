@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS 5200_project;
 -- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
@@ -5,22 +6,22 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema 5200_project`
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema 5200_project`
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `5200_project` DEFAULT CHARACTER SET utf8 ;
 -- -----------------------------------------------------
 -- Schema restdb
 -- -----------------------------------------------------
-USE `mydb` ;
+USE `5200_project` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Violation`
+-- Table `5200_project`.`Violation`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Violation` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Violation` (
   `idViolations` INT NOT NULL,
   `latitude` VARCHAR(45) NULL,
   `longitute` VARCHAR(45) NULL,
@@ -29,9 +30,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Parking`
+-- Table `5200_project`.`Parking`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Parking` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Parking` (
   `idParkingCameraViolations` INT NOT NULL,
   `Plate` VARCHAR(7) NULL,
   `State` VARCHAR(2) NULL,
@@ -57,16 +58,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Parking` (
   INDEX `fk_ParkingCameraViolations_Violations1_idx` (`Violations_idViolations` ASC) VISIBLE,
   CONSTRAINT `fk_ParkingCameraViolations_Violations1`
     FOREIGN KEY (`Violations_idViolations`)
-    REFERENCES `mydb`.`Violation` (`idViolations`)
+    REFERENCES `5200_project`.`Violation` (`idViolations`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`User`
+-- Table `5200_project`.`User`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`User` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`User` (
   `UserID` INT NOT NULL,
   `Username` VARCHAR(45) NULL,
   `passwordhash` VARCHAR(45) NULL,
@@ -75,9 +76,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Trip`
+-- Table `5200_project`.`Trip`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Trip` (
   `tripID` INT NOT NULL,
   `start_date` DATE NULL,
   `end_date` DATE NULL,
@@ -86,16 +87,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
   INDEX `fk_Trips_User_idx` (`User_UserID` ASC) VISIBLE,
   CONSTRAINT `fk_Trips_User`
     FOREIGN KEY (`User_UserID`)
-    REFERENCES `mydb`.`User` (`UserID`)
+    REFERENCES `5200_project`.`User` (`UserID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Business`
+-- Table `5200_project`.`Business`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Business` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Business` (
   `BuisinessID` INT NOT NULL,
   `DCA Liscence` VARCHAR(45) NULL,
   `Liscence Type` VARCHAR(45) NULL,
@@ -126,9 +127,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Destination`
+-- Table `5200_project`.`Destination`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Destination` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Destination` (
   `Trips_tripID` INT NOT NULL,
   `latitude` VARCHAR(45) NULL,
   `longitude` VARCHAR(45) NULL,
@@ -139,21 +140,21 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Destination` (
   INDEX `fk_Destination_Business1_idx` (`Business_BuisinessID` ASC) VISIBLE,
   CONSTRAINT `fk_Destination_Trips1`
     FOREIGN KEY (`Trips_tripID`)
-    REFERENCES `mydb`.`Trip` (`tripID`)
+    REFERENCES `5200_project`.`Trip` (`tripID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Destination_Business1`
     FOREIGN KEY (`Business_BuisinessID`)
-    REFERENCES `mydb`.`Business` (`BuisinessID`)
+    REFERENCES `5200_project`.`Business` (`BuisinessID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Event`
+-- Table `5200_project`.`Event`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Event` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Event` (
   `idEvent` INT NOT NULL,
   `Name` VARCHAR(45) NULL,
   `Start Date` DATE NULL,
@@ -171,16 +172,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Event` (
   INDEX `fk_Event_Destination1_idx` (`Destination_DestinationID` ASC) VISIBLE,
   CONSTRAINT `fk_Event_Destination1`
     FOREIGN KEY (`Destination_DestinationID`)
-    REFERENCES `mydb`.`Destination` (`DestinationID`)
+    REFERENCES `5200_project`.`Destination` (`DestinationID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`AirBNB`
+-- Table `5200_project`.`AirBNB`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`AirBNB` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`AirBNB` (
   `room_id` INT NOT NULL AUTO_INCREMENT,
   `host_id` INT NOT NULL,
   `room_type` VARCHAR(45) NULL,
@@ -201,16 +202,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`AirBNB` (
   UNIQUE INDEX `host_id_UNIQUE` (`host_id` ASC) VISIBLE,
   CONSTRAINT `fk_AirBNB_Destination1`
     FOREIGN KEY (`Destination_DestinationID`)
-    REFERENCES `mydb`.`Destination` (`DestinationID`)
+    REFERENCES `5200_project`.`Destination` (`DestinationID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`BoroughBoundaries-lookup?`
+-- Table `5200_project`.`BoroughBoundaries-lookup?`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`BoroughBoundaries-lookup?` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`BoroughBoundaries-lookup?` (
   `idBoroughBoundaries` INT NOT NULL,
   `Name` VARCHAR(45) NULL,
   `Shape_length` VARCHAR(45) NULL,
@@ -222,9 +223,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Park`
+-- Table `5200_project`.`Park`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Park` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Park` (
   `Destination_DestinationID` INT NOT NULL,
   `park_name` VARCHAR(45) NULL,
   `the_geom` VARCHAR(1000) NULL,
@@ -240,40 +241,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Park` (
   PRIMARY KEY (`Destination_DestinationID`),
   CONSTRAINT `fk_Parks_Destination1`
     FOREIGN KEY (`Destination_DestinationID`)
-    REFERENCES `mydb`.`Destination` (`DestinationID`)
+    REFERENCES `5200_project`.`Destination` (`DestinationID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `mydb`.`Fines`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Fines` (
-)
-ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
--- Table `mydb`.`Ticket Data`
+-- Table `5200_project`.`Location`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Ticket Data` (
-)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Parking Data`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Parking Data` (
-)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Location`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Location` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Location` (
   `LocationID` INT NOT NULL,
   `Latitude` VARCHAR(45) NULL,
   `Longitude` VARCHAR(45) NULL,
@@ -288,9 +266,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`booking.com`
+-- Table `5200_project`.`booking.com`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`booking.com` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`booking.com` (
   `bookingID` INT NOT NULL,
   `city` VARCHAR(45) NULL,
   `distance` VARCHAR(45) NULL,
@@ -303,9 +281,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Collision`
+-- Table `5200_project`.`Collision`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Collision` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Collision` (
   `CollisionID` INT NOT NULL,
   `Date` DATETIME NULL,
   `Time` VARCHAR(45) NULL,
@@ -321,16 +299,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Collision` (
   INDEX `fk_Collision_Violations1_idx` (`Violations_idViolations` ASC) VISIBLE,
   CONSTRAINT `fk_Collision_Violations1`
     FOREIGN KEY (`Violations_idViolations`)
-    REFERENCES `mydb`.`Violation` (`idViolations`)
+    REFERENCES `5200_project`.`Violation` (`idViolations`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Request?`
+-- Table `5200_project`.`Request?`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Request?` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Request?` (
   `idRequest?` INT NOT NULL,
   `requesturl` VARCHAR(45) NULL,
   `request user` VARCHAR(45) NULL,
@@ -339,9 +317,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Vocational`
+-- Table `5200_project`.`Vocational`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Vocational` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Vocational` (
   `Destination_DestinationID` INT NOT NULL,
   `organization_name` VARCHAR(45) NULL,
   `address1` VARCHAR(45) NULL,
@@ -377,16 +355,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vocational` (
   PRIMARY KEY (`Destination_DestinationID`),
   CONSTRAINT `fk_Vocational_Destination1`
     FOREIGN KEY (`Destination_DestinationID`)
-    REFERENCES `mydb`.`Destination` (`DestinationID`)
+    REFERENCES `5200_project`.`Destination` (`DestinationID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Point_of_interest`
+-- Table `5200_project`.`Point_of_interest`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Point_of_interest` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Point_of_interest` (
   `FID` VARCHAR(45) NULL,
   `SafType` VARCHAR(45) NULL,
   `Destination_DestinationID` INT NOT NULL,
@@ -407,16 +385,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Point_of_interest` (
   INDEX `fk_points_of_interest_Destination1_idx` (`Destination_DestinationID` ASC) VISIBLE,
   CONSTRAINT `fk_points_of_interest_Destination1`
     FOREIGN KEY (`Destination_DestinationID`)
-    REFERENCES `mydb`.`Destination` (`DestinationID`)
+    REFERENCES `5200_project`.`Destination` (`DestinationID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`WholesaleMakets`
+-- Table `5200_project`.`WholesaleMakets`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`WholesaleMakets` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`WholesaleMakets` (
   `Destination_DestinationID` INT NOT NULL,
   `Destination_Business_BuisinessID` INT NOT NULL,
   `CREATED` DATETIME NULL,
@@ -448,16 +426,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`WholesaleMakets` (
   PRIMARY KEY (`Destination_DestinationID`, `Destination_Business_BuisinessID`),
   CONSTRAINT `fk_WholesaleMakets_Destination1`
     FOREIGN KEY (`Destination_DestinationID` , `Destination_Business_BuisinessID`)
-    REFERENCES `mydb`.`Destination` (`DestinationID` , `Business_BuisinessID`)
+    REFERENCES `5200_project`.`Destination` (`DestinationID` , `Business_BuisinessID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`CommunityGarden`
+-- Table `5200_project`.`CommunityGarden`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`CommunityGarden` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`CommunityGarden` (
   `Destination_DestinationID` INT NOT NULL,
   `Destination_Business_BuisinessID` INT NOT NULL,
   `Type` TEXT(30) NULL,
@@ -466,8 +444,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`CommunityGarden` (
   `Contact Information` TEXT(30) NULL,
   `Postcode` INT NULL,
   `Borough` TEXT(30) NULL,
-  `Latitude` DECIMAL(20,30) NULL,
-  `Longitude` DECIMAL(20,30) NULL,
+  `Latitude` DECIMAL(30,20) NULL,
+  `Longitude` DECIMAL(30,20) NULL,
   `Community Board` INT NULL,
   `Council District` INT NULL,
   `Census Tract` INT NULL,
@@ -477,37 +455,37 @@ CREATE TABLE IF NOT EXISTS `mydb`.`CommunityGarden` (
   PRIMARY KEY (`Destination_DestinationID`, `Destination_Business_BuisinessID`),
   CONSTRAINT `fk_CommunityGarden_Destination1`
     FOREIGN KEY (`Destination_DestinationID` , `Destination_Business_BuisinessID`)
-    REFERENCES `mydb`.`Destination` (`DestinationID` , `Business_BuisinessID`)
+    REFERENCES `5200_project`.`Destination` (`DestinationID` , `Business_BuisinessID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`EmergencyResponse`
+-- Table `5200_project`.`EmergencyResponse`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`EmergencyResponse` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`EmergencyResponse` (
   `Violation_idViolations` INT NOT NULL,
   `Incident Type` VARCHAR(45) NULL,
   `Location` VARCHAR(45) NULL,
   `Borough` VARCHAR(45) NULL,
   `Creation Date` DATETIME NULL,
   `Closed Date` DATETIME NULL,
-  `Latitude` DECIMAL(20,30) NULL,
-  `Longitude` DECIMAL(20,30) NULL,
+  `Latitude` DECIMAL(30,20) NULL,
+  `Longitude` DECIMAL(30,20) NULL,
   PRIMARY KEY (`Violation_idViolations`),
   CONSTRAINT `fk_EmergencyResponse_Violation1`
     FOREIGN KEY (`Violation_idViolations`)
-    REFERENCES `mydb`.`Violation` (`idViolations`)
+    REFERENCES `5200_project`.`Violation` (`idViolations`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Graffiti`
+-- Table `5200_project`.`Graffiti`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Graffiti` (
+CREATE TABLE IF NOT EXISTS `5200_project`.`Graffiti` (
   `Violation_idViolations` INT NOT NULL,
   `Incident_address` VARCHAR(45) NULL,
   `Borough` VARCHAR(45) NULL,
@@ -531,7 +509,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Graffiti` (
   PRIMARY KEY (`Violation_idViolations`),
   CONSTRAINT `fk_Graffiti_Violation1`
     FOREIGN KEY (`Violation_idViolations`)
-    REFERENCES `mydb`.`Violation` (`idViolations`)
+    REFERENCES `5200_project`.`Violation` (`idViolations`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -540,3 +518,4 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
