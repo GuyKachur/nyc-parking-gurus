@@ -19,8 +19,6 @@ DROP TABLE IF EXISTS `mydb`.`User` ;
 -- -----------------------------------------------------
 -- Table `mydb`.`User`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`User` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`User` (
   `UserPK` INT NOT NULL,
   `Username` VARCHAR(45) NULL,
@@ -32,8 +30,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Trip`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Trip` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
   `TripPK` INT NOT NULL AUTO_INCREMENT,
   `start_date` DATE NULL,
@@ -52,8 +48,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Destination`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Destination` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Destination` (
   `DestinationPK` INT NOT NULL AUTO_INCREMENT,
   `Trips_tripID` INT NOT NULL,
@@ -72,8 +66,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`AirBNB`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`AirBNB` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`AirBNB` (
   `AirBNBPK` INT NOT NULL AUTO_INCREMENT,
   `room_id` INT NULL,
@@ -103,8 +95,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Park`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Park` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Park` (
   `ParkPK` INT NOT NULL AUTO_INCREMENT,
   `park_name` VARCHAR(45) NULL,
@@ -131,8 +121,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Business`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Business` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Business` (
   `BusinessPK` INT NOT NULL AUTO_INCREMENT,
   `BuisinessID` INT NULL,
@@ -173,8 +161,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Violation`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Violation` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Violation` (
   `ViolationPK` INT NOT NULL AUTO_INCREMENT,
   `Latitude` DECIMAL(20,10) NULL,
@@ -186,8 +172,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Collision`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Collision` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Collision` (
   `CollisionPK` INT NOT NULL AUTO_INCREMENT,
   `CollisionID` INT NULL,
@@ -213,8 +197,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Point_of_Interest`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Point_of_Interest` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Point_of_Interest` (
   `Point_of_InterestPK` INT NOT NULL AUTO_INCREMENT,
   `FID` VARCHAR(45) NULL,
@@ -245,8 +227,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`EmergencyResponse`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`EmergencyResponse` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`EmergencyResponse` (
   `EmergencyResponsePK` INT NOT NULL,
   `IncidentType` VARCHAR(45) NULL,
@@ -268,8 +248,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Graffiti`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Graffiti` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Graffiti` (
   `GraffitiPK` INT NOT NULL,
   `IncidentAdress` VARCHAR(45) NULL,
@@ -304,8 +282,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`WholesaleMarket`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`WholesaleMarket` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`WholesaleMarket` (
   `WholesaleMarketPK` INT NOT NULL,
   `Created` DATETIME NULL,
@@ -347,8 +323,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`CommunityGarden`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`CommunityGarden` ;
-
 CREATE TABLE IF NOT EXISTS `mydb`.`CommunityGarden` (
   `CommunityGardenPK` INT NOT NULL,
   `Type` VARCHAR(45) NULL,
