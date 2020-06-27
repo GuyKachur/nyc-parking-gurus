@@ -2,6 +2,7 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 USE `mydb` ;
 
 -- Drop everything
+DROP TABLE IF EXISTS `mydb`.`Trip` ;
 DROP TABLE IF EXISTS `mydb`.`Graffiti` ;
 DROP TABLE IF EXISTS `mydb`.`EmergencyResponse` ;
 DROP TABLE IF EXISTS `mydb`.`CommunityGarden` ;
@@ -12,7 +13,6 @@ DROP TABLE IF EXISTS `mydb`.`Collision` ;
 DROP TABLE IF EXISTS `mydb`.`WholesaleMarket` ;
 DROP TABLE IF EXISTS `mydb`.`Point_of_Interest` ;
 DROP TABLE IF EXISTS `mydb`.`Destination` ;
-DROP TABLE IF EXISTS `mydb`.`Trip` ;
 DROP TABLE IF EXISTS `mydb`.`Violation` ;
 DROP TABLE IF EXISTS `mydb`.`User` ;
 
@@ -28,38 +28,13 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Trip`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
-  `TripPK` INT NOT NULL AUTO_INCREMENT,
-  `start_date` DATE NULL,
-  `end_date` DATE NULL,
-  `User_UserID` INT NOT NULL,
-  PRIMARY KEY (`TripPK`),
-  INDEX `fk_Trips_User_idx` (`User_UserID` ASC) VISIBLE,
-  CONSTRAINT `fk_Trips_User`
-    FOREIGN KEY (`User_UserID`)
-    REFERENCES `mydb`.`User` (`UserPK`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `mydb`.`Destination`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Destination` (
   `DestinationPK` INT NOT NULL AUTO_INCREMENT,
-  `Trips_tripID` INT NOT NULL,
   `Latitude` DECIMAL(20,10) NULL,
   `Longitude` DECIMAL(20,10) NULL,
-  INDEX `fk_Destination_Trips1_idx` (`Trips_tripID` ASC) VISIBLE,
-  PRIMARY KEY (`DestinationPK`),
-  CONSTRAINT `fk_Destination_Trips1`
-    FOREIGN KEY (`Trips_tripID`)
-    REFERENCES `mydb`.`Trip` (`TripPK`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
+  PRIMARY KEY (`DestinationPK`))
 ENGINE = InnoDB;
 
 
@@ -343,6 +318,30 @@ CREATE TABLE IF NOT EXISTS `mydb`.`CommunityGarden` (
   PRIMARY KEY (`CommunityGardenPK`),
   CONSTRAINT `DestinationKey5`
     FOREIGN KEY (`CommunityGardenPK`)
+    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Trip`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
+  `TripPK` INT NOT NULL AUTO_INCREMENT,
+  `start_date` DATE NULL,
+  `end_date` DATE NULL,
+  `User_UserID` INT NOT NULL,
+  `Destination_DestinationPK` INT NOT NULL,
+  PRIMARY KEY (`TripPK`),
+  INDEX `fk_Trips_User_idx` (`User_UserID` ASC) VISIBLE,
+  INDEX `DestinationKey7_idx` (`Destination_DestinationPK` ASC) VISIBLE,
+  CONSTRAINT `fk_Trips_User`
+    FOREIGN KEY (`User_UserID`)
+    REFERENCES `mydb`.`User` (`UserPK`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `DestinationKey7`
+    FOREIGN KEY (`Destination_DestinationPK`)
     REFERENCES `mydb`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
