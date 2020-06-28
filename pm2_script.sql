@@ -156,9 +156,14 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Collision` (
   `Zip` INT NULL,
   `Latitude` DECIMAL(20,10) NULL,
   `Longitude` DECIMAL(20,10) NULL,
-  `StreetName` VARCHAR(45) NULL,
-  `PeopleInjured` VARCHAR(45) NULL,
-  `PeopleKilled` VARCHAR(45) NULL,
+    `PERSONS INJURED`     int    null,
+    `PERSONS KILLED`      int    null,
+    `PEDESTRIANS INJURED` int    null,
+    `PEDESTRIANS KILLED`  int    null,
+    `CYCLISTS INJURED`    int    null,
+    `CYCLISTS KILLED`     int    null,
+    `MOTORISTS INJURED`   int    null,
+    `MOTORISTS KILLED`    int    null,
   INDEX `ViolationKey1_idx` (`CollisionPK` ASC) VISIBLE,
   PRIMARY KEY (`CollisionPK`),
   CONSTRAINT `ViolationKey1`
@@ -208,8 +213,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`EmergencyResponse` (
   `Location` VARCHAR(45) NULL,
   `Borough` VARCHAR(45) NULL,
   `Creation Date` DATE NULL,
-  `Latitude` DECIMAL(20,10) NULL,
-  `Longitude` DECIMAL(20,10) NULL,
   INDEX `ViolationKey3_idx` (`EmergencyResponsePK` ASC) VISIBLE,
   PRIMARY KEY (`EmergencyResponsePK`),
   CONSTRAINT `ViolationKey3`
@@ -237,8 +240,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Graffiti` (
   `ClosedDate` DATE NULL,
   `XCoordinate` VARCHAR(45) NULL,
   `YCoordinate` VARCHAR(45) NULL,
-  `Latitude` DECIMAL(20,10) NULL,
-  `Longitude` DECIMAL(20,10) NULL,
   `ZipCode` VARCHAR(45) NULL,
   `CensusTract` VARCHAR(45) NULL,
   `BIN` VARCHAR(45) NULL,
@@ -346,3 +347,55 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`latlngDistance`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`latlngDistance` (
+    sourceLAT      float not null,
+    sourceLNG      float not null,
+    destinationLAT float not null,
+    destinationLNG float not null,
+    Distance       float not null)
+ENGINE = InnoDB;
+
+drop function if exists parking_gurus.distanceLATLNG;
+drop function if exists parking_gurus.getDistance;
+
+CREATE FUNCTION distanceLATLNG(lat1 FLOAT, lon1 FLOAT,
+                               lat2 FLOAT, lon2 FLOAT) RETURNS float
+    NO SQL
+    DETERMINISTIC
+    COMMENT 'Returns the distance in degrees on the Earth between two known points of latitude and longitude. To get miles, multiply by 3961, and km by 6373'
+
+BEGIN
+    set @distance = DEGREES(ACOS(
+                    COS(RADIANS(lat1)) *
+                    COS(RADIANS(lat2)) *
+                    COS(RADIANS(lon2) - RADIANS(lon1)) +
+                    SIN(RADIANS(lat1)) * SIN(RADIANS(lat2))
+        )) * 6373; -- to get in km
+    insert into latlngdistance value (lat1, lon1, lat2, lon2, @distance);
+    return @distance;
+END;
+
+
+
+CREATE FUNCTION getDistance(lat1 FLOAT, lon1 FLOAT,
+                            lat2 FLOAT, lon2 FLOAT) RETURNS FLOAT
+    NO SQL
+    DETERMINISTIC
+    COMMENT 'saves a calculation do latlngDestionation table'
+
+BEGIN
+    -- results return more then one sometimes
+    set @distance = (Select distance
+                     from latlngdistance
+                     where abs(sourceLAT - lat1) <= 0.01
+                       and abs(sourceLNG - lon1) <= 0.01
+                       and abs(destinationLAT - lat2) <= 0.01
+                       and abs(destinationLNG - lon2) <= 0.01
+                     limit 1);
+    set @return = if(@distance is null, distanceLATLNG(lat1, lon1, lat2, lon2), @distance);
+    return @return;
+END;
