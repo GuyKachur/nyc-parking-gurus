@@ -19,15 +19,17 @@ DROP TABLE IF EXISTS `nyc`.`User`;
 -- -----------------------------------------------------
 -- Table `nyc`.`User`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `nyc`.`User` (
-  `UserName` VARCHAR(45) NOT NULL,
-  `PasswordHash` VARCHAR(90) NOT NULL,
-  `FirstName` VARCHAR(45) NULL,
-  `LastName` VARCHAR(45) NOT NULL,
-  `Email` VARCHAR(320) NULL,
-  `PhoneNum` VARCHAR(45) NULL,
-  PRIMARY KEY (`UserName`))
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `nyc`.`User`
+(
+    `UserName`     VARCHAR(45)  NOT NULL,
+    `PasswordHash` VARCHAR(90)  NOT NULL,
+    `FirstName`    VARCHAR(45)  NULL,
+    `LastName`     VARCHAR(45)  NOT NULL,
+    `Email`        VARCHAR(320) NULL,
+    `PhoneNum`     VARCHAR(45)  NULL,
+    PRIMARY KEY (`UserName`)
+)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -38,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Destination`
     `DestinationPK` INT             NOT NULL AUTO_INCREMENT,
     `Latitude`      DECIMAL(20, 10) NULL,
     `Longitude`     DECIMAL(20, 10) NULL,
+    `type`          VARCHAR(45)     not null,
     PRIMARY KEY (`DestinationPK`)
 )
     ENGINE = InnoDB;
@@ -48,13 +51,14 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Destination`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `nyc`.`AirBNB`
 (
-    `AirBNBPK`          INT    NOT NULL AUTO_INCREMENT,
+    `AirBNBPK`          INT           NOT NULL AUTO_INCREMENT,
     `name`              VARCHAR(100)  NULL,
     `host_name`         VARCHAR(50)   NULL,
     `host_id`           INT           NULL,
     `room_type`         VARCHAR(45)   NULL,
     `borough`           VARCHAR(45)   NULL,
     `neighborhood`      VARCHAR(45)   NULL,
+    `reviews`           INT           NULL,
     `reviews_per_month` DECIMAL(5, 2) NULL,
     `price`             INT           NULL,
     INDEX `DestinationKey4_idx` (`AirBNBPK` ASC) VISIBLE,
@@ -121,6 +125,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Violation`
     `ViolationPK` INT             NOT NULL AUTO_INCREMENT,
     `Latitude`    DECIMAL(20, 10) NULL,
     `Longitude`   DECIMAL(20, 10) NULL,
+    `type`        VARCHAR(45)     not null,
     PRIMARY KEY (`ViolationPK`)
 )
     ENGINE = InnoDB;
@@ -198,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`EmergencyResponse`
     `IncidentType`        VARCHAR(45) NULL,
     `Location`            VARCHAR(45) NULL,
     `Borough`             VARCHAR(45) NULL,
-    `CreatedDate`       DATETIME        NULL,
+    `CreatedDate`         DATETIME    NULL,
     INDEX `ViolationKey3_idx` (`EmergencyResponsePK` ASC) VISIBLE,
     PRIMARY KEY (`EmergencyResponsePK`),
     CONSTRAINT `ViolationKey3`
@@ -218,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Graffiti`
     `GraffitiPK`     INT         NOT NULL,
     `IncidentAdress` VARCHAR(45) NULL,
     `Borough`        VARCHAR(45) NULL,
-    `CreatedDate`    DATETIME        NULL,
+    `CreatedDate`    DATETIME    NULL,
     `ZipCode`        VARCHAR(45) NULL,
     `CensusTract`    VARCHAR(45) NULL,
     INDEX `ViolationKey2_idx` (`GraffitiPK` ASC) VISIBLE,
@@ -238,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Graffiti`
 CREATE TABLE IF NOT EXISTS `nyc`.`Market`
 (
     `MarketPK`    INT         NOT NULL,
-    `CreatedDate`     DATETIME    NULL,
+    `CreatedDate` DATETIME    NULL,
     `AccountName` VARCHAR(45) NULL,
     `TradeName`   VARCHAR(45) NULL,
     `Address`     VARCHAR(45) NULL,
@@ -288,8 +293,8 @@ CREATE TABLE IF NOT EXISTS `nyc`.`CommunityGarden`
 CREATE TABLE IF NOT EXISTS `nyc`.`Trip`
 (
     `TripPK`                    INT         NOT NULL AUTO_INCREMENT,
-    `start_date`                DATETIME        NULL,
-    `end_date`                  DATETIME        NULL,
+    `start_date`                DATETIME    NULL,
+    `end_date`                  DATETIME    NULL,
     `User_Username`             VARCHAR(45) NOT NULL,
     `Destination_DestinationPK` INT         NOT NULL,
     PRIMARY KEY (`TripPK`),
