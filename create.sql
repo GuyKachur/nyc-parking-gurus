@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `nyc`.`User`
     `FirstName`    VARCHAR(45)  NULL,
     `LastName`     VARCHAR(45)  NOT NULL,
     `Email`        VARCHAR(320) NULL,
-    `PhoneNum`     VARCHAR(45)  NULL,
     PRIMARY KEY (`UserName`)
 )
     ENGINE = InnoDB;
@@ -40,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Destination`
     `DestinationPK` INT             NOT NULL AUTO_INCREMENT,
     `Latitude`      DECIMAL(20, 10) NULL,
     `Longitude`     DECIMAL(20, 10) NULL,
-    `type`          VARCHAR(45)     not null,
+    `destinationtype`          VARCHAR(45)     not null,
     PRIMARY KEY (`DestinationPK`)
 )
     ENGINE = InnoDB;
@@ -98,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Business`
 (
     `BusinessPK`       INT         NOT NULL AUTO_INCREMENT,
     `Industry`         VARCHAR(45) NULL,
-    `Buisness Name`    VARCHAR(45) NULL,
+    `BusinessName`    VARCHAR(45) NULL,
     `Address building` VARCHAR(45) NULL,
     `Address St Name`  VARCHAR(45) NULL,
     `City`             VARCHAR(45) NULL,
@@ -125,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Violation`
     `ViolationPK` INT             NOT NULL AUTO_INCREMENT,
     `Latitude`    DECIMAL(20, 10) NULL,
     `Longitude`   DECIMAL(20, 10) NULL,
-    `type`        VARCHAR(45)     not null,
+    `violationType`        VARCHAR(45)     not null,
     PRIMARY KEY (`ViolationPK`)
 )
     ENGINE = InnoDB;
@@ -137,13 +136,9 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Violation`
 CREATE TABLE IF NOT EXISTS `nyc`.`Collision`
 (
     `CollisionPK`         INT             NOT NULL AUTO_INCREMENT,
-    `CollisionID`         INT             NULL,
     `Date`                DATETIME        NULL,
-    `Time`                VARCHAR(45)     NULL,
     `Borough`             VARCHAR(45)     NULL,
     `ZipCode`             INT             NULL,
-    `Latitude`            DECIMAL(20, 10) NULL,
-    `Longitude`           DECIMAL(20, 10) NULL,
     `PERSONS INJURED`     int             null,
     `PERSONS KILLED`      int             null,
     `PEDESTRIANS INJURED` int             null,
@@ -180,8 +175,8 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Point_of_Interest`
     `Point_of_InterestPK` INT         NOT NULL AUTO_INCREMENT,
     `side_of_street`      INT         NULL,
     `domain`              VARCHAR(50) NULL,
-    `borough`             INT         NULL,
-    `Type`                VARCHAR(40),
+    `borough`             VARCHAR(45)         NULL,
+    `POIType`                VARCHAR(40),
     `name`                VARCHAR(45) NULL,
     INDEX `DestinationKey3_idx` (`Point_of_InterestPK` ASC) VISIBLE,
     PRIMARY KEY (`Point_of_InterestPK`),
@@ -221,11 +216,10 @@ CREATE TABLE IF NOT EXISTS `nyc`.`EmergencyResponse`
 CREATE TABLE IF NOT EXISTS `nyc`.`Graffiti`
 (
     `GraffitiPK`     INT         NOT NULL,
-    `IncidentAdress` VARCHAR(45) NULL,
+    `IncidentAddress` VARCHAR(45) NULL,
     `Borough`        VARCHAR(45) NULL,
     `CreatedDate`    DATETIME    NULL,
     `ZipCode`        VARCHAR(45) NULL,
-    `CensusTract`    VARCHAR(45) NULL,
     INDEX `ViolationKey2_idx` (`GraffitiPK` ASC) VISIBLE,
     PRIMARY KEY (`GraffitiPK`),
     CONSTRAINT `ViolationKey2`
@@ -253,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Market`
     `Phone`       VARCHAR(45) NULL,
     `Email`       VARCHAR(45) NULL,
     `Market`      VARCHAR(45) NULL,
-    `Type`        VARCHAR(45) NULL,
+    `marketType`        VARCHAR(45) NULL,
     INDEX `DestinationKey6_idx` (`MarketPK` ASC) VISIBLE,
     PRIMARY KEY (`MarketPK`),
     CONSTRAINT `DestinationKey6`
@@ -271,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Market`
 CREATE TABLE IF NOT EXISTS `nyc`.`CommunityGarden`
 (
     `CommunityGardenPK` INT         NOT NULL AUTO_INCREMENT,
-    `Type`              VARCHAR(45) NULL,
+    `gardenType`              VARCHAR(45) NULL,
     `Name`              VARCHAR(45) NULL,
     `Address`           VARCHAR(45) NULL,
     `Neighborhood_name` VARCHAR(45) NULL,
