@@ -194,11 +194,11 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Point_of_Interest`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `nyc`.`EmergencyResponse`
 (
-    `EmergencyResponsePK` INT         NOT NULL,
+    `EmergencyResponsePK` INT         NOT NULL auto_increment,
     `IncidentType`        VARCHAR(45) NULL,
     `Location`            VARCHAR(45) NULL,
     `Borough`             VARCHAR(45) NULL,
-    `Creation Date`       DATE        NULL,
+    `CreatedDate`       DATETIME        NULL,
     INDEX `ViolationKey3_idx` (`EmergencyResponsePK` ASC) VISIBLE,
     PRIMARY KEY (`EmergencyResponsePK`),
     CONSTRAINT `ViolationKey3`
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Graffiti`
     `GraffitiPK`     INT         NOT NULL,
     `IncidentAdress` VARCHAR(45) NULL,
     `Borough`        VARCHAR(45) NULL,
-    `CreatedDate`    DATE        NULL,
+    `CreatedDate`    DATETIME        NULL,
     `ZipCode`        VARCHAR(45) NULL,
     `CensusTract`    VARCHAR(45) NULL,
     INDEX `ViolationKey2_idx` (`GraffitiPK` ASC) VISIBLE,
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Graffiti`
 CREATE TABLE IF NOT EXISTS `nyc`.`Market`
 (
     `MarketPK`    INT         NOT NULL,
-    `Created`     DATETIME    NULL,
+    `CreatedDate`     DATETIME    NULL,
     `AccountName` VARCHAR(45) NULL,
     `TradeName`   VARCHAR(45) NULL,
     `Address`     VARCHAR(45) NULL,
@@ -288,8 +288,8 @@ CREATE TABLE IF NOT EXISTS `nyc`.`CommunityGarden`
 CREATE TABLE IF NOT EXISTS `nyc`.`Trip`
 (
     `TripPK`                    INT         NOT NULL AUTO_INCREMENT,
-    `start_date`                DATE        NULL,
-    `end_date`                  DATE        NULL,
+    `start_date`                DATETIME        NULL,
+    `end_date`                  DATETIME        NULL,
     `User_Username`             VARCHAR(45) NOT NULL,
     `Destination_DestinationPK` INT         NOT NULL,
     PRIMARY KEY (`TripPK`),
