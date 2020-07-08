@@ -1,25 +1,25 @@
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `nyc` DEFAULT CHARACTER SET utf8 ;
+USE `nyc` ;
 
 -- Drop everything
-DROP TABLE IF EXISTS `mydb`.`Trip` ;
-DROP TABLE IF EXISTS `mydb`.`Graffiti` ;
-DROP TABLE IF EXISTS `mydb`.`EmergencyResponse` ;
-DROP TABLE IF EXISTS `mydb`.`CommunityGarden` ;
-DROP TABLE IF EXISTS `mydb`.`AirBNB` ;
-DROP TABLE IF EXISTS `mydb`.`Park` ;
-DROP TABLE IF EXISTS `mydb`.`Business` ;
-DROP TABLE IF EXISTS `mydb`.`Collision` ;
-DROP TABLE IF EXISTS `mydb`.`WholesaleMarket` ;
-DROP TABLE IF EXISTS `mydb`.`Point_of_Interest` ;
-DROP TABLE IF EXISTS `mydb`.`Destination` ;
-DROP TABLE IF EXISTS `mydb`.`Violation` ;
-DROP TABLE IF EXISTS `mydb`.`User` ;
+DROP TABLE IF EXISTS `nyc`.`Trip` ;
+DROP TABLE IF EXISTS `nyc`.`Graffiti` ;
+DROP TABLE IF EXISTS `nyc`.`EmergencyResponse` ;
+DROP TABLE IF EXISTS `nyc`.`CommunityGarden` ;
+DROP TABLE IF EXISTS `nyc`.`AirBNB` ;
+DROP TABLE IF EXISTS `nyc`.`Park` ;
+DROP TABLE IF EXISTS `nyc`.`Business` ;
+DROP TABLE IF EXISTS `nyc`.`Collision` ;
+DROP TABLE IF EXISTS `nyc`.`Market` ;
+DROP TABLE IF EXISTS `nyc`.`Point_of_Interest` ;
+DROP TABLE IF EXISTS `nyc`.`Destination` ;
+DROP TABLE IF EXISTS `nyc`.`Violation` ;
+DROP TABLE IF EXISTS `nyc`.`User` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`User`
+-- Table `nyc`.`User`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`User` (
+CREATE TABLE IF NOT EXISTS `nyc`.`User` (
   `UserPK` INT NOT NULL,
   `Username` VARCHAR(45) NULL,
   `passwordhash` VARCHAR(45) NULL,
@@ -28,9 +28,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Destination`
+-- Table `nyc`.`Destination`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Destination` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Destination` (
   `DestinationPK` INT NOT NULL AUTO_INCREMENT,
   `Latitude` DECIMAL(20,10) NULL,
   `Longitude` DECIMAL(20,10) NULL,
@@ -39,71 +39,50 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`AirBNB`
+-- Table `nyc`.`AirBNB`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`AirBNB` (
+CREATE TABLE IF NOT EXISTS `nyc`.`AirBNB` (
   `AirBNBPK` INT NOT NULL AUTO_INCREMENT,
-  `room_id` INT NULL,
+  'Name' TEXT,
+  `Host_Name` TEXT,
   `host_id` INT NULL,
   `room_type` VARCHAR(45) NULL,
   `borough` VARCHAR(45) NULL,
   `neighborhood` VARCHAR(45) NULL,
-  `reviews` DECIMAL(5,2) NULL,
-  `overall_satisfaction` VARCHAR(45) NULL,
-  `accommodates` VARCHAR(45) NULL,
-  `bedrooms` INT NULL,
+  `reviews_per_month` DECIMAL(5,2) NULL,
   `price` INT NULL,
-  `minstay` INT NULL,
-  `latitude` DECIMAL(20,10) NULL,
-  `longitude` DECIMAL(20,10) NULL,
-  `last_modified` DATETIME NULL,
-  INDEX `DestinationKey4_idx` (`AirBNBPK` ASC) VISIBLE,
+ INDEX `DestinationKey4_idx` (`AirBNBPK` ASC) VISIBLE,
   PRIMARY KEY (`AirBNBPK`),
   CONSTRAINT `DestinationKey4`
     FOREIGN KEY (`AirBNBPK`)
-    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    REFERENCES `nyc`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Park`
+-- Table `nyc`.`Park`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Park` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Park` (
   `ParkPK` INT NOT NULL AUTO_INCREMENT,
   `park_name` VARCHAR(45) NULL,
-  `the_geom` VARCHAR(1000) NULL,
-  `feat_code` INT NULL,
-  `source_id` INT NULL,
-  `sub_code` VARCHAR(45) NULL,
   `landuse` VARCHAR(45) NULL,
-  `park_num` VARCHAR(45) NULL,
-  `status` VARCHAR(45) NULL,
-  `system` VARCHAR(45) NULL,
-  `shape_leng` VARCHAR(45) NULL,
-  `shape_area` VARCHAR(45) NULL,
   INDEX `DestinationKey1_idx` (`ParkPK` ASC) VISIBLE,
   PRIMARY KEY (`ParkPK`),
   CONSTRAINT `DestinationKey1`
     FOREIGN KEY (`ParkPK`)
-    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    REFERENCES `nyc`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Business`
+-- Table `nyc`.`Business`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Business` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Business` (
   `BusinessPK` INT NOT NULL AUTO_INCREMENT,
-  `BuisinessID` INT NULL,
-  `DCA Liscence` VARCHAR(45) NULL,
-  `Liscence Type` VARCHAR(45) NULL,
-  `Liscence Expiration Date` VARCHAR(45) NULL,
-  `Licencse Status` VARCHAR(45) NULL,
-  `License Creation Date` VARCHAR(45) NULL,
   `Industry` VARCHAR(45) NULL,
   `Buisness Name` VARCHAR(45) NULL,
   `Address building` VARCHAR(45) NULL,
@@ -113,30 +92,20 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Business` (
   `Zip` INT NULL,
   `Phone Number` INT NULL,
   `Address Borough` VARCHAR(45) NULL,
-  `Borough ID` INT NULL,
-  `Community Board` VARCHAR(45) NULL,
-  `Council District` VARCHAR(45) NULL,
-  `BIN` INT NULL,
-  `BBL` VARCHAR(45) NULL,
-  `NTA` VARCHAR(45) NULL,
-  `Census Tract` VARCHAR(45) NULL,
-  `Long` DECIMAL(20,10) NULL,
-  `latitude` DECIMAL(20,10) NULL,
-  `location` VARCHAR(45) NULL,
   INDEX `DestinationKey2_idx` (`BusinessPK` ASC) VISIBLE,
   PRIMARY KEY (`BusinessPK`),
   CONSTRAINT `DestinationKey2`
     FOREIGN KEY (`BusinessPK`)
-    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    REFERENCES `nyc`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Violation`
+-- Table `nyc`.`Violation`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Violation` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Violation` (
   `ViolationPK` INT NOT NULL AUTO_INCREMENT,
   `Latitude` DECIMAL(20,10) NULL,
   `Longitude` DECIMAL(20,10) NULL,
@@ -145,9 +114,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Collision`
+-- Table `nyc`.`Collision`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Collision` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Collision` (
   `CollisionPK` INT NOT NULL AUTO_INCREMENT,
   `CollisionID` INT NULL,
   `Date` DATETIME NULL,
@@ -168,16 +137,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Collision` (
   PRIMARY KEY (`CollisionPK`),
   CONSTRAINT `ViolationKey1`
     FOREIGN KEY (`CollisionPK`)
-    REFERENCES `mydb`.`Violation` (`ViolationPK`)
+    REFERENCES `nyc`.`Violation` (`ViolationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Point_of_Interest`
+-- Table `nyc`.`Point_of_Interest`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Point_of_Interest` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Point_of_Interest` (
   `Point_of_InterestPK` INT NOT NULL AUTO_INCREMENT,
   `FID` VARCHAR(45) NULL,
   `SafType` VARCHAR(45) NULL,
@@ -198,16 +167,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Point_of_Interest` (
   PRIMARY KEY (`Point_of_InterestPK`),
   CONSTRAINT `DestinationKey3`
     FOREIGN KEY (`Point_of_InterestPK`)
-    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    REFERENCES `nyc`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`EmergencyResponse`
+-- Table `nyc`.`EmergencyResponse`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`EmergencyResponse` (
+CREATE TABLE IF NOT EXISTS `nyc`.`EmergencyResponse` (
   `EmergencyResponsePK` INT NOT NULL,
   `IncidentType` VARCHAR(45) NULL,
   `Location` VARCHAR(45) NULL,
@@ -217,16 +186,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`EmergencyResponse` (
   PRIMARY KEY (`EmergencyResponsePK`),
   CONSTRAINT `ViolationKey3`
     FOREIGN KEY (`EmergencyResponsePK`)
-    REFERENCES `mydb`.`Violation` (`ViolationPK`)
+    REFERENCES `nyc`.`Violation` (`ViolationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Graffiti`
+-- Table `nyc`.`Graffiti`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Graffiti` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Graffiti` (
   `GraffitiPK` INT NOT NULL,
   `IncidentAdress` VARCHAR(45) NULL,
   `Borough` VARCHAR(45) NULL,
@@ -249,16 +218,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Graffiti` (
   PRIMARY KEY (`GraffitiPK`),
   CONSTRAINT `ViolationKey2`
     FOREIGN KEY (`GraffitiPK`)
-    REFERENCES `mydb`.`Violation` (`ViolationPK`)
+    REFERENCES `nyc`.`Violation` (`ViolationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`WholesaleMarket`
+-- Table `nyc`.`WholesaleMarket`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`WholesaleMarket` (
+CREATE TABLE IF NOT EXISTS `nyc`.`WholesaleMarket` (
   `WholesaleMarketPK` INT NOT NULL,
   `Created` DATETIME NULL,
   `BICNumber` VARCHAR(45) NULL,
@@ -290,16 +259,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`WholesaleMarket` (
   PRIMARY KEY (`WholesaleMarketPK`),
   CONSTRAINT `DestinationKey6`
     FOREIGN KEY (`WholesaleMarketPK`)
-    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    REFERENCES `nyc`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`CommunityGarden`
+-- Table `nyc`.`CommunityGarden`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`CommunityGarden` (
+CREATE TABLE IF NOT EXISTS `nyc`.`CommunityGarden` (
   `CommunityGardenPK` INT NOT NULL,
   `Type` VARCHAR(45) NULL,
   `Name` VARCHAR(45) NULL,
@@ -319,15 +288,15 @@ CREATE TABLE IF NOT EXISTS `mydb`.`CommunityGarden` (
   PRIMARY KEY (`CommunityGardenPK`),
   CONSTRAINT `DestinationKey5`
     FOREIGN KEY (`CommunityGardenPK`)
-    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    REFERENCES `nyc`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Trip`
+-- Table `nyc`.`Trip`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
+CREATE TABLE IF NOT EXISTS `nyc`.`Trip` (
   `TripPK` INT NOT NULL AUTO_INCREMENT,
   `start_date` DATE NULL,
   `end_date` DATE NULL,
@@ -338,20 +307,20 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Trip` (
   INDEX `DestinationKey7_idx` (`Destination_DestinationPK` ASC) VISIBLE,
   CONSTRAINT `fk_Trips_User`
     FOREIGN KEY (`User_UserID`)
-    REFERENCES `mydb`.`User` (`UserPK`)
+    REFERENCES `nyc`.`User` (`UserPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `DestinationKey7`
     FOREIGN KEY (`Destination_DestinationPK`)
-    REFERENCES `mydb`.`Destination` (`DestinationPK`)
+    REFERENCES `nyc`.`Destination` (`DestinationPK`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`latlngDistance`
+-- Table `nyc`.`latlngDistance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`latlngDistance` (
+CREATE TABLE IF NOT EXISTS `nyc`.`latlngDistance` (
     sourceLAT      float not null,
     sourceLNG      float not null,
     destinationLAT float not null,
