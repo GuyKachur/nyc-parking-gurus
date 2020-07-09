@@ -2,9 +2,12 @@ package nyc.dal;
 
 import nyc.model.Business;
 import nyc.model.Destination;
-import tools.ConnectionManager;
+import nyc.tools.ConnectionManager;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class BusinessDAO extends DestinationDAO {
     protected ConnectionManager connectionManager;

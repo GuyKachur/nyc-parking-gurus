@@ -2,7 +2,7 @@ package nyc.dal;
 
 import nyc.model.Destination;
 import nyc.model.Market;
-import tools.ConnectionManager;
+import nyc.tools.ConnectionManager;
 
 import java.sql.*;
 

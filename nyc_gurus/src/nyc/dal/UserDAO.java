@@ -1,13 +1,9 @@
 package nyc.dal;
 
-import nyc.model.*;
+import nyc.model.User;
 import nyc.tools.ConnectionManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class UserDAO {
 	protected ConnectionManager connectionManager;

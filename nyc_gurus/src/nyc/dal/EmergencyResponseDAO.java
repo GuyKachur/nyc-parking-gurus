@@ -2,7 +2,7 @@ package nyc.dal;
 
 import nyc.model.EmergencyResponse;
 import nyc.model.Violation;
-import tools.ConnectionManager;
+import nyc.tools.ConnectionManager;
 
 import java.sql.*;
 

@@ -1,8 +1,8 @@
 package nyc.dal;
 
-import nyc.model.Park;
 import nyc.model.Destination;
-import tools.ConnectionManager;
+import nyc.model.Park;
+import nyc.tools.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

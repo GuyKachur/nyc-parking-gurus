@@ -2,9 +2,12 @@ package nyc.dal;
 
 import nyc.model.AirBNB;
 import nyc.model.Destination;
-import tools.ConnectionManager;
+import nyc.tools.ConnectionManager;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AirBNBDAO extends DestinationDAO {
     protected ConnectionManager connectionManager;

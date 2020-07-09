@@ -1,9 +1,8 @@
 package nyc.dal;
 
 import nyc.model.Graffiti;
-import nyc.model.Graffiti;
 import nyc.model.Violation;
-import tools.ConnectionManager;
+import nyc.tools.ConnectionManager;
 
 import java.sql.*;
 
