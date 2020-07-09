@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Destination`
 CREATE TABLE IF NOT EXISTS `nyc`.`AirBNB`
 (
     `AirBNBPK`          INT           NOT NULL AUTO_INCREMENT,
-    `name`              VARCHAR(100)  NULL,
+    `name`              VARCHAR(200)  NULL,
     `host_name`         VARCHAR(50)   NULL,
     `host_id`           INT           NULL,
     `room_type`         VARCHAR(45)   NULL,
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Business`
     `City`             VARCHAR(45) NULL,
     `State`            VARCHAR(45) NULL,
     `ZipCode`          INT         NULL,
-    `Phone Number`     INT         NULL,
+    `Phone Number`     BIGINT         NULL,
     `Address Borough`  VARCHAR(45) NULL,
     INDEX `DestinationKey2_idx` (`BusinessPK` ASC) VISIBLE,
     PRIMARY KEY (`BusinessPK`),
@@ -157,16 +157,6 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Collision`
 )
     ENGINE = InnoDB;
 
-#
-# NYC five boroughs.
-# 1 Manhattan
-# 2 Bronx
-# 3 Brooklyn
-# 4 Queens
-# 5 Staten Island
-# 6 Nassau County
-# 7 Westchester
-# 8 New Jersey
 -- -----------------------------------------------------
 -- Table `nyc`.`Point_of_Interest`
 -- -----------------------------------------------------

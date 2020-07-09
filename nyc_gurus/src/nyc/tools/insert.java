@@ -50,10 +50,11 @@ public class insert {
      * @param args
      * @throws SQLException
      */
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         Uploader up = new Uploader();
         try {
-            up.uploadAirBnb();
+//            up.uploadAirBnb();
+            up.uploadBusiness();
         } catch (IOException e) {
             e.printStackTrace();
         }

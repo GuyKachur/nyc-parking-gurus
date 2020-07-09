@@ -8,10 +8,10 @@ public class Business extends Destination {
     protected String city;
     protected String state;
     protected int zipCode;
-    protected int phoneNumber;
+    protected long phoneNumber;
     protected String borough;
 
-    public Business(long key, float lat, float lng, String industry, String name, String addressBuilding, String addressStreet, String city, String state, int zipCode, int phoneNumber, String borough) {
+    public Business(long key, float lat, float lng, String industry, String name, String addressBuilding, String addressStreet, String city, String state, int zipCode, long phoneNumber, String borough) {
         super(key, lat, lng, Destination.destinationType.business);
         this.industry = industry;
         this.name = name;
@@ -40,11 +40,11 @@ public class Business extends Destination {
         this.state = state;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

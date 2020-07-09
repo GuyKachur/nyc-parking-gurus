@@ -49,7 +49,7 @@ public class BusinessDAO extends DestinationDAO {
             insertStmt.setString(6, Business.getCity());
             insertStmt.setString(7, Business.getState());
             insertStmt.setInt(8, Business.getZipCode());
-            insertStmt.setInt(9, Business.getPhoneNumber());
+            insertStmt.setLong(9, Business.getPhoneNumber());
             insertStmt.setString(10, Business.getBorough());
             insertStmt.executeUpdate();
             return Business;
@@ -96,7 +96,7 @@ public class BusinessDAO extends DestinationDAO {
                 String borough = results.getString("address borough");
 
                 int zip = results.getInt("zipcode");
-                int phone = results.getInt("phone number");
+                long phone = results.getLong("phone number");
                 Business Business = new Business(BusinessKey, lat, lng, industry, businessname, addressbuilding, strName, city, state, zip, phone, borough);
                 return Business;
             }
@@ -175,8 +175,8 @@ public class BusinessDAO extends DestinationDAO {
                     Business.setZipCode(Integer.parseInt(updateValue));
                     break;
                 case "phone number":
-                    updateStmt.setInt(2, Integer.parseInt(updateValue));
-                    Business.setPhoneNumber(Integer.parseInt(updateValue));
+                    updateStmt.setLong(2, Long.parseLong(updateValue));
+                    Business.setPhoneNumber(Long.parseLong(updateValue));
                     break;
                 case "borough":
                     updateStmt.setString(2, updateValue);
