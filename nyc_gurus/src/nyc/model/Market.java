@@ -9,14 +9,14 @@ public class Market extends Destination {
     protected String address;
     protected String city;
     protected String state;
-    protected String zipCode;
+    protected int zipCode;
     protected String phone;
     protected String email;
     protected String market;
     protected String marketType;
 
 
-    public Market(long key, float lat, float lng, Date created, String accountName, String tradeName, String address, String city, String state, String zipCode, String phone, String email, String market, String marketType) {
+    public Market(long key, float lat, float lng, Date created, String accountName, String tradeName, String address, String city, String state, int zipCode, String phone, String email, String market, String marketType) {
         super(key, lat, lng, Destination.destinationType.market);
         this.created = created;
         this.accountName = accountName;
@@ -39,11 +39,11 @@ public class Market extends Destination {
         this.created = created;
     }
 
-    public String getZipCode() {
+    public int getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(String zipCode) {
+    public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
     }
 

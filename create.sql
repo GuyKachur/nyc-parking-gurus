@@ -260,21 +260,21 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Market`
 
 
 -- -----------------------------------------------------
--- Table `nyc`.`CommunityGarden`
+-- Table `nyc`.`Garden`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `nyc`.`CommunityGarden`
+CREATE TABLE IF NOT EXISTS `nyc`.`Garden`
 (
-    `CommunityGardenPK` INT         NOT NULL AUTO_INCREMENT,
+    `GardenPK` INT         NOT NULL AUTO_INCREMENT,
     `gardenType`              VARCHAR(45) NULL,
     `Name`              VARCHAR(45) NULL,
     `Address`           VARCHAR(45) NULL,
     `Neighborhood_name` VARCHAR(45) NULL,
     `ZipCode`           VARCHAR(45) NULL,
     `Borough`           VARCHAR(45) NULL,
-    INDEX `DestinationKey5_idx` (`CommunityGardenPK` ASC) VISIBLE,
-    PRIMARY KEY (`CommunityGardenPK`),
+    INDEX `DestinationKey5_idx` (`GardenPK` ASC) VISIBLE,
+    PRIMARY KEY (`GardenPK`),
     CONSTRAINT `DestinationKey5`
-        FOREIGN KEY (`CommunityGardenPK`)
+        FOREIGN KEY (`GardenPK`)
             REFERENCES `nyc`.`Destination` (`DestinationPK`)
             ON DELETE CASCADE
             ON UPDATE CASCADE

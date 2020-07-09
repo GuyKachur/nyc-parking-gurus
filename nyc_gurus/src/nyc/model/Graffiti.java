@@ -6,10 +6,10 @@ public class Graffiti extends Violation {
 
     protected String IncidentAddress;
     protected String Borough;
-    protected String ZipCode;
+    protected int ZipCode;
     protected Date created;
 
-    public Graffiti(long key, float lat, float lng,  String incidentAddress, String borough, String zipCode, Date created) {
+    public Graffiti(long key, float lat, float lng,  String incidentAddress, String borough, int zipCode, Date created) {
         super(key, lat, lng, ViolationType.graffiti);
         IncidentAddress = incidentAddress;
         Borough = borough;
@@ -41,11 +41,11 @@ public class Graffiti extends Violation {
         Borough = borough;
     }
 
-    public String getZipCode() {
+    public int getZipCode() {
         return ZipCode;
     }
 
-    public void setZipCode(String zipCode) {
+    public void setZipCode(int zipCode) {
         ZipCode = zipCode;
     }
 

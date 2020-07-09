@@ -57,7 +57,7 @@ public class UserDAO {
 	 * Update the password hash of the User instance.
 	 * This runs a UPDATE statement.
 	 */
-	public User updateAbout(User user, String newPasswordHash) throws SQLException {
+	public User updatePasswordHash(User user, String newPasswordHash) throws SQLException {
 		String updateUser = "UPDATE User SET passwordhash=? WHERE Username=?;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
