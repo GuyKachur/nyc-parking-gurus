@@ -6,8 +6,7 @@ public class Collision extends Violation {
 
     protected Date date;
     protected String Borough;
-    protected String ZipCode;
-    protected String StreetName;
+    protected int ZipCode;
     protected int PeopleInjured;
     protected int PeopleKilled;
     protected int PedestriansInjured;
@@ -18,7 +17,7 @@ public class Collision extends Violation {
     protected int MotoristsKilled;
 
     public Collision(long key, float lat, float lng,
-                     Date date, String borough, String zipCode, String streetName,
+                     Date date, String borough, int zipCode,
                      int peopleInjured, int peopleKilled, int pedestriansInjured,
                      int pedestriansKilled, int cyclistsInjured, int cyclistsKilled,
                      int motoristsInjured, int motoristsKilled) {
@@ -26,7 +25,6 @@ public class Collision extends Violation {
         this.date = date;
         Borough = borough;
         ZipCode = zipCode;
-        StreetName = streetName;
         PeopleInjured = peopleInjured;
         PeopleKilled = peopleKilled;
         PedestriansInjured = pedestriansInjured;
@@ -45,20 +43,12 @@ public class Collision extends Violation {
         Borough = borough;
     }
 
-    public String getZipCode() {
+    public int getZipCode() {
         return ZipCode;
     }
 
-    public void setZipCode(String zipCode) {
+    public void setZipCode(int zipCode) {
         ZipCode = zipCode;
-    }
-
-    public String getStreetName() {
-        return StreetName;
-    }
-
-    public void setStreetName(String streetName) {
-        StreetName = streetName;
     }
 
     public Date getDate() {

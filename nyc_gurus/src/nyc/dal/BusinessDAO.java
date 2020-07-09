@@ -1,7 +1,6 @@
 package nyc.dal;
 
 import nyc.model.Business;
-import nyc.model.Business;
 import nyc.model.Destination;
 import tools.ConnectionManager;
 
@@ -126,11 +125,6 @@ public class BusinessDAO extends DestinationDAO {
 
             updateStmt.setLong(3, Business.getKey());
             updateStmt.executeUpdate();
-
-
-//            , industry, businessname," +
-//            " `address building`, `address st name`, city, state," +
-//                    " zipcode, `phone number`, `address borough`, ,  " +
 
             switch (columnName) {
                 case "lat":

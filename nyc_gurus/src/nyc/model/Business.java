@@ -12,7 +12,7 @@ public class Business extends Destination {
     protected String borough;
 
     public Business(long key, float lat, float lng, String industry, String name, String addressBuilding, String addressStreet, String city, String state, int zipCode, int phoneNumber, String borough) {
-        super(key, lat, lng, destinationType.business);
+        super(key, lat, lng, Destination.destinationType.business);
         this.industry = industry;
         this.name = name;
         this.addressBuilding = addressBuilding;

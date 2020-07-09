@@ -31,7 +31,6 @@ public class AirBNBDAO extends DestinationDAO {
                         "VALUES(?,?,?,?,?,?,?,?,?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
-        ResultSet resultKey = null;
         try {
             connection = connectionManager.getConnection();
             insertStmt = connection.prepareStatement(insertAirbnb);
@@ -158,7 +157,6 @@ public class AirBNBDAO extends DestinationDAO {
                     updateStmt.setFloat(2, Float.parseFloat(updateValue));
                     Airbnb.setReviewPerMonth(Float.parseFloat(updateValue));
                     break;
-                // host_id,  price, reviews
                 case "host_id":
                     updateStmt.setInt(2, Integer.parseInt(updateValue));
                     Airbnb.setHostID(Integer.parseInt(updateValue));
