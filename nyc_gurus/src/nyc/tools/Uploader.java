@@ -216,4 +216,173 @@ public class Uploader {
         csvReader.close();
         return true;
     }
+
+    public boolean uploadCollision() throws IOException {
+        CollisionDAO collisionDAO = CollisionDAO.getInstance();
+        String path = new File("extras/RawData/parking_gurus_collisions.csv").getAbsolutePath();
+        BufferedReader csvReader = new BufferedReader(new FileReader(new File(path)));
+        path = new File("extras/RawData/collisions-errors.csv").getAbsolutePath();
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
+
+        String row = csvReader.readLine(); //discard the first row of headers
+        int count = 0;
+        while ((row = csvReader.readLine()) != null && count < 50) {
+            count++;
+            try {
+                System.out.println("Parsing row: " + row);
+                String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
+                Float lat=0.0F, lng = 0.0F;
+                if (!data[5].isEmpty()) {
+                    lat = Float.parseFloat(data[5]);
+                }
+                if (!data[6].isEmpty()) {
+                    lng = Float.parseFloat(data[6]);
+                }
+
+                Collision collisionToInsert = new Collision(
+                        0L,
+                        lat,
+                        lng,
+                        new SimpleDateFormat("MM/DD/YYYY").parse(data[1]),
+                        standardizeBorough(data[3]),
+                        !data[4].isEmpty() ? Integer.parseInt(data[4]) : -1,
+                        !data[11].isEmpty() ? Integer.parseInt(data[11]) : 0,
+                        !data[12].isEmpty() ? Integer.parseInt(data[12]) : 0,
+                        !data[13].isEmpty() ? Integer.parseInt(data[13]) : 0,
+                        !data[14].isEmpty() ? Integer.parseInt(data[14]) : 0,
+                        !data[15].isEmpty() ? Integer.parseInt(data[15]) : 0,
+                        !data[16].isEmpty() ? Integer.parseInt(data[16]) : 0,
+                        !data[17].isEmpty() ? Integer.parseInt(data[17]) : 0,
+                        !data[18].isEmpty() ? Integer.parseInt(data[18]) : 0
+
+                );
+                System.out.println("Parsed into Collision: " + collisionToInsert);
+                try {
+                    collisionDAO.create(collisionToInsert);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                    System.err.println("Couldn't write row to database, skipping:  " + row);
+                    csvWriter.write(row);
+                    csvWriter.newLine();
+                }
+
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException | ParseException e) {
+                System.err.println("Error Parsing row:  " + row);
+                csvWriter.write(row);
+                csvWriter.newLine();
+                e.printStackTrace();
+            }
+        }
+        csvWriter.close();
+        csvReader.close();
+        return true;
+    }
+
+    public boolean uploadEmergencyResponse() throws IOException {
+        EmergencyResponseDAO emergencyResponseDAO = EmergencyResponseDAO.getInstance();
+        String path = new File("extras/RawData/emergency_response.csv").getAbsolutePath();
+        BufferedReader csvReader = new BufferedReader(new FileReader(new File(path)));
+        path = new File("extras/RawData/emergency_response-errors.csv").getAbsolutePath();
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
+
+        String row = csvReader.readLine(); //discard the first row of headers
+        int count = 0;
+        while ((row = csvReader.readLine()) != null && count < 50) {
+            count++;
+            try {
+                System.out.println("Parsing row: " + row);
+                String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
+                Float lat=0.0F, lng = 0.0F;
+                if (!data[5].isEmpty()) {
+                    lat = Float.parseFloat(data[5]);
+                }
+                if (!data[6].isEmpty()) {
+                    lng = Float.parseFloat(data[6]);
+                }
+
+                EmergencyResponse emergencyResponseToInsert = new EmergencyResponse(
+                        0L,
+                        lat,
+                        lng,
+                        data[0],
+                        data[1],
+                        standardizeBorough(data[2]),
+                        new SimpleDateFormat("MM/DD/YYYY hh:mm:ss").parse(data[3])
+
+                );
+                System.out.println("Parsed into EmergencyResponse: " + emergencyResponseToInsert);
+                try {
+                    emergencyResponseDAO.create(emergencyResponseToInsert);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                    System.err.println("Couldn't write row to database, skipping:  " + row);
+                    csvWriter.write(row);
+                    csvWriter.newLine();
+                }
+
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException | ParseException e) {
+                System.err.println("Error Parsing row:  " + row);
+                csvWriter.write(row);
+                csvWriter.newLine();
+                e.printStackTrace();
+            }
+        }
+        csvWriter.close();
+        csvReader.close();
+        return true;
+    }
+
+    public boolean uploadGraffiti() throws IOException {
+        GraffitiDAO graffitiDAO = GraffitiDAO.getInstance();
+        String path = new File("extras/RawData/graffiti.csv").getAbsolutePath();
+        BufferedReader csvReader = new BufferedReader(new FileReader(new File(path)));
+        path = new File("extras/RawData/graffiti-errors.csv").getAbsolutePath();
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
+
+        String row = csvReader.readLine(); //discard the first row of headers
+        int count = 0;
+        while ((row = csvReader.readLine()) != null && count < 50) {
+            count++;
+            try {
+                System.out.println("Parsing row: " + row);
+                String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
+                Float lat=0.0F, lng = 0.0F;
+                if (!data[10].isEmpty()) {
+                    lat = Float.parseFloat(data[10]);
+                }
+                if (!data[11].isEmpty()) {
+                    lng = Float.parseFloat(data[11]);
+                }
+
+                Graffiti graffitiToInsert = new Graffiti(
+                        0L,
+                        lat,
+                        lng,
+                        data[0],
+                        standardizeBorough(data[1]),
+                        !data[14].isEmpty() ? Integer.parseInt(data[14]) : -1,
+                        new SimpleDateFormat("MM/DD/YYYY").parse(data[6])
+
+                );
+                System.out.println("Parsed into Graffiti: " + graffitiToInsert);
+                try {
+                    graffitiDAO.create(graffitiToInsert);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                    System.err.println("Couldn't write row to database, skipping:  " + row);
+                    csvWriter.write(row);
+                    csvWriter.newLine();
+                }
+
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException | ParseException e) {
+                System.err.println("Error Parsing row:  " + row);
+                csvWriter.write(row);
+                csvWriter.newLine();
+                e.printStackTrace();
+            }
+        }
+        csvWriter.close();
+        csvReader.close();
+        return true;
+    }
 }

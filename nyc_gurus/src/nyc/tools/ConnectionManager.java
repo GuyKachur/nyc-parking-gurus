@@ -53,6 +53,7 @@ public class ConnectionManager {
             Properties connectionProperties = new Properties();
             connectionProperties.put("user", this.user);
             connectionProperties.put("password", this.password);
+            connectionProperties.put("serverTimezone", "UTC");
             // Ensure the JDBC driver is loaded by retrieving the runtime Class descriptor.
             // Otherwise, Tomcat may have issues loading libraries in the proper order.
             // One alternative is calling this in the HttpServlet init() override.
