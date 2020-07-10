@@ -8,12 +8,11 @@ public class PointOfInterest extends Destination {
     protected String POIType;
 
     public PointOfInterest(long key, float lat, float lng,
-                           String name, String borough, String domain,
+                           String name, String borough,
                            int sideOfStreet, String POIType) {
         super(key, lat, lng, destinationType.poi);
         this.name = name;
         this.borough = borough;
-        this.domain = domain;
         this.sideOfStreet = sideOfStreet;
         this.POIType = POIType;
     }
@@ -24,14 +23,6 @@ public class PointOfInterest extends Destination {
 
     public void setBorough(String borough) {
         this.borough = borough;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
     }
 
     public int getSideOfStreet() {

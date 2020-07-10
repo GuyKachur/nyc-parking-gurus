@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`AirBNB`
 CREATE TABLE IF NOT EXISTS `nyc`.`Park`
 (
     `ParkPK`    INT         NOT NULL AUTO_INCREMENT,
-    `park_name` VARCHAR(45) NULL,
+    `park_name` VARCHAR(200) NULL,
     `landuse`   VARCHAR(45) NULL,
     INDEX `DestinationKey1_idx` (`ParkPK` ASC) VISIBLE,
     PRIMARY KEY (`ParkPK`),
@@ -164,10 +164,9 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Point_of_Interest`
 (
     `Point_of_InterestPK` INT         NOT NULL AUTO_INCREMENT,
     `side_of_street`      INT         NULL,
-    `domain`              VARCHAR(50) NULL,
     `borough`             VARCHAR(45)         NULL,
     `POIType`                VARCHAR(40),
-    `name`                VARCHAR(45) NULL,
+    `name`                VARCHAR(200) NULL,
     INDEX `DestinationKey3_idx` (`Point_of_InterestPK` ASC) VISIBLE,
     PRIMARY KEY (`Point_of_InterestPK`),
     CONSTRAINT `DestinationKey3`
@@ -228,9 +227,9 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Market`
 (
     `MarketPK`    INT         NOT NULL,
     `CreatedDate` DATETIME    NULL,
-    `AccountName` VARCHAR(45) NULL,
+    `AccountName` VARCHAR(200) NULL,
     `TradeName`   VARCHAR(45) NULL,
-    `Address`     VARCHAR(45) NULL,
+    `Address`     VARCHAR(200) NULL,
     `City`        VARCHAR(45) NULL,
     `State`       VARCHAR(45) NULL,
     `ZipCode`     VARCHAR(45) NULL,

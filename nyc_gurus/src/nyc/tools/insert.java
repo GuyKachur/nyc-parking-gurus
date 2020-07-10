@@ -2,6 +2,8 @@ package nyc.tools;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -56,9 +58,12 @@ public class insert {
 //            up.uploadAirBnb();
 //            up.uploadBusiness(); //work
 //            up.uploadGarden();
-            
+//                up.uploadMarket();
+//            up.uploadPark();
+            up.uploadPointOfInterest();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }

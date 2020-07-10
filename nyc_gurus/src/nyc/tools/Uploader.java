@@ -1,15 +1,17 @@
 package nyc.tools;
 
-import nyc.dal.AirBNBDAO;
-import nyc.dal.BusinessDAO;
-import nyc.dal.GardenDAO;
-import nyc.model.AirBNB;
-import nyc.model.Business;
-import nyc.model.Garden;
+import nyc.dal.*;
+import nyc.model.*;
 
 import java.io.*;
 import java.security.cert.CertificateRevokedException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Uploader {
     //id,name,host_id,host_name,neighbourhood_group,neighbourhood,latitude,longitude,room_type,price,minimum_nights,number_of_reviews,last_review,reviews_per_month,calculated_host_listings_count,availability_365
@@ -119,14 +121,14 @@ public class Uploader {
         String row = csvReader.readLine(); //discard the first row of headers
         int count = 0;
         while ((row = csvReader.readLine()) != null) {
-            if(count % 1000 == 0) {
+            if (count % 1000 == 0) {
                 System.out.println("Processed " + count);
             }
             count++;
             try {
 //                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //doesnt split , inside quotes
-                Float lat=0.0F, lng = 0.0F;
+                float lat = 0.0F, lng = 0.0F;
                 if (!data[25].isEmpty()) {
                     Float.parseFloat(data[25]);
                 }
@@ -146,8 +148,8 @@ public class Uploader {
                         data[9],
                         data[11],
                         data[12],
-                        zip.isEmpty()? 0 : Integer.parseInt(zip),
-                        phone.isEmpty()? 0L : Long.parseLong(phone),
+                        zip.isEmpty() ? 0 : Integer.parseInt(zip),
+                        phone.isEmpty() ? 0L : Long.parseLong(phone),
                         standardizeBorough(data[15])
                 );
 //                System.out.println("Parsed into Business: " + businessToInsert);
@@ -180,7 +182,7 @@ public class Uploader {
         String row = csvReader.readLine(); //discard the first row of headers
         int count = 0;
         while ((row = csvReader.readLine()) != null) {
-            if(count % 1000 == 0) {
+            if (count % 1000 == 0) {
                 System.out.println("Processed " + count);
             }
             count++;
@@ -191,14 +193,14 @@ public class Uploader {
                 String zip = data[13].replaceAll("\\.[0-9]+", "");
 
 
-                float lat = data[10].isEmpty()? 0F : Float.parseFloat(data[10]);
-                float lng = data[11].isEmpty()? 0F : Float.parseFloat(data[11]);
+                float lat = data[10].isEmpty() ? 0F : Float.parseFloat(data[10]);
+                float lng = data[11].isEmpty() ? 0F : Float.parseFloat(data[11]);
                 String name = data[4];
                 String address = data[4];
                 String borough = standardizeBorough(data[1]);
                 String neighborhood = data[8];
 
-                Garden gardenToInsert = new Garden(0,lat, lng, name, zip.isEmpty()? 0 : Integer.parseInt(zip), address, neighborhood, borough);
+                Garden gardenToInsert = new Garden(0, lat, lng, name, zip.isEmpty() ? 0 : Integer.parseInt(zip), address, neighborhood, borough);
 //                System.out.println("Parsed into Garden: " + gardenToInsert);
                 try {
                     gardenDAO.create(gardenToInsert);
@@ -235,7 +237,7 @@ public class Uploader {
             try {
                 System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
-                Float lat=0.0F, lng = 0.0F;
+                float lat=0.0F, lng = 0.0F;
                 if (!data[5].isEmpty()) {
                     lat = Float.parseFloat(data[5]);
                 }
@@ -296,7 +298,7 @@ public class Uploader {
             try {
                 System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
-                Float lat=0.0F, lng = 0.0F;
+                float lat=0.0F, lng = 0.0F;
                 if (!data[5].isEmpty()) {
                     lat = Float.parseFloat(data[5]);
                 }
@@ -350,7 +352,7 @@ public class Uploader {
             try {
                 System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
-                Float lat=0.0F, lng = 0.0F;
+                float lat=0.0F, lng = 0.0F;
                 if (!data[10].isEmpty()) {
                     lat = Float.parseFloat(data[10]);
                 }
@@ -389,4 +391,243 @@ public class Uploader {
         csvReader.close();
         return true;
     }
+
+    public boolean uploadMarket() throws IOException {
+        MarketDAO marketDAO = MarketDAO.getInstance();
+        BufferedReader csvReader = new BufferedReader(new FileReader(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\markets.csv").getAbsolutePath()));
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\markets-errors.csv")));
+
+        String row = csvReader.readLine(); //discard the first row of headers
+        int count = 0;
+        while ((row = csvReader.readLine()) != null) {
+            if (count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
+            count++;
+            try {
+//                System.out.println("Parsing row: " + row);
+                String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //doesnt split , inside quotes
+
+
+                float lat = data[17].isEmpty() ? 0.0F : Float.parseFloat(data[17]);
+                float lng = data[18].isEmpty() ? 0.0F : Float.parseFloat(data[18]);
+                String zip = data[7].replaceAll("\\-[0-9]+", "");
+
+                String accountName = data[2];
+                String tradeName = data[3];
+                String address = data[4];
+                String city = data[5];
+                String state = data[6];
+
+                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                Date created = null;
+                try {
+                    created = df.parse(data[0]);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                String phone = data[14].replaceAll("[^\\d]", "");
+                String email = data[9];
+                String market = data[10];
+                String marketType = data[11];
+                Market marketToInsert = new Market(0,
+                        lat, lng, created,
+                        accountName.replaceAll("\"", ""), tradeName,
+                        address.replaceAll("\"", ""), city, state, zip.isEmpty() ? 0 : Integer.parseInt(zip),
+                        phone,
+                        email, market, marketType);
+//                System.out.println("Parsed into Market: " + marketToInsert);
+                try {
+                    marketDAO.create(marketToInsert);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                    System.err.println("Couldn't write row to database, skipping:  " + row);
+                    csvWriter.write(row);
+                    csvWriter.newLine();
+                }
+
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                System.err.println("Error Parsing row:  " + row);
+                csvWriter.write(row);
+                csvWriter.newLine();
+                e.printStackTrace();
+            }
+        }
+        csvWriter.close();
+        csvReader.close();
+        return true;
+    }
+
+
+    public float getLongAverage(String polygon) {
+        if (polygon.isEmpty()) {
+            return 0.0F;
+        }
+        Pattern pattern = Pattern.compile("-[0-9]+.[0-9]+");
+        Matcher matcher = pattern.matcher(polygon);
+        //average the polygon shape out
+        float num = 0.0F;
+        float total = 0.0F;
+        if (matcher.find()) {
+            num++;
+            total += Float.parseFloat(matcher.group(0));
+
+        } else {
+            return num;
+        }
+        return total / num;
+    }
+
+    public float getLatAverage(String polygon) {
+        if (polygon.isEmpty()) {
+            return 0.0F;
+        }
+        Pattern pattern = Pattern.compile("[0-9]+.[0-9]+,");
+        Matcher matcher = pattern.matcher(polygon);
+        //average the polygon shape out
+        float num = 0.0F;
+        float total = 0.0F;
+        if (matcher.find()) {
+            num++;
+            total += Float.parseFloat(matcher.group(0).replaceAll(",", ""));
+
+        } else {
+            return num;
+        }
+        return total / num;
+    }
+
+
+    public void uploadPark() throws IOException {
+        ParkDAO parkDAO = ParkDAO.getInstance();
+        BufferedReader csvReader = new BufferedReader(new FileReader(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parks.csv").getAbsolutePath()));
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parks-errors.csv")));
+
+        String row = csvReader.readLine(); //discard the first row of headers
+        int count = 0;
+        while ((row = csvReader.readLine()) != null) {
+            if (count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
+            count++;
+            try {
+//                System.out.println("Parsing row: " + row);
+                String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //doesnt split , inside quotes
+
+                float lat = getLatAverage(data[1]);
+                float lng = getLongAverage(data[1]);
+                String name = data[0].replaceAll("\"", "");
+                String landuse = data[5];
+                Park parkToInsert = new Park(0, lat, lng, name, landuse);
+//                System.out.println("Parsed into Park: " + parkToInsert);
+                try {
+                    parkDAO.create(parkToInsert);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                    System.err.println("Couldn't write row to database, skipping:  " + row);
+                    csvWriter.write(row);
+                    csvWriter.newLine();
+                }
+
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                System.err.println("Error Parsing row:  " + row);
+                csvWriter.write(row);
+                csvWriter.newLine();
+                e.printStackTrace();
+            }
+        }
+        csvWriter.close();
+        csvReader.close();
+    }
+
+
+    public float getLongFromPoint(String point) {
+        if (point.isEmpty()) {
+            return 0.0F;
+        }
+        Pattern pattern = Pattern.compile("-[0-9]+.[0-9]+");
+        Matcher matcher = pattern.matcher(point);
+        if (matcher.find()) {
+            return Float.parseFloat(matcher.group(0));
+
+        }
+        return 0.0F;
+    }
+
+    public float getLatFromPoint(String point) {
+        if (point.isEmpty()) {
+            return 0.0F;
+        }
+        Pattern pattern = Pattern.compile(" [0-9]+.[0-9]+");
+        Matcher matcher = pattern.matcher(point);
+        if (matcher.find()) {
+            return Float.parseFloat(matcher.group(0).replaceAll(" ", ""));
+
+        }
+        return 0.0F;
+    }
+
+    //TODO enum for type?
+    /*1 Residential
+        2 Education Facility
+        3 Cultural Facility
+        4 Recreational Facility
+        5 Social Services
+        6 Transportation Facility
+        7 Commercial
+        8 Government Facility (non public safety)
+        9 Religious Institution
+        10 Health Services
+        11 Public Safety
+        12 Water
+        13 Miscellaneous*/
+
+    public void uploadPointOfInterest() throws IOException {
+        PointOfInterestDAO pointOfInterestDAO = PointOfInterestDAO.getInstance();
+        BufferedReader csvReader = new BufferedReader(new FileReader(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\POI.csv").getAbsolutePath()));
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\POI-errors.csv")));
+
+        String row = csvReader.readLine(); //discard the first row of headers
+        int count = 0;
+        while ((row = csvReader.readLine()) != null) {
+            if (count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
+            count++;
+            try {
+//                System.out.println("Parsing row: " + row);
+                String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //doesnt split , inside quotes
+
+
+                float lat = getLatFromPoint(data[3]);
+                float lng = getLongFromPoint(data[3]);
+                String name = data[0];
+                String borough = standardizeBorough(data[8]);
+
+                int sideOfStreet = data[4].isEmpty() ? 0 : Integer.parseInt(data[4].replaceAll("\\.[0-9]+", ""));
+                String POIType = data[10];
+                PointOfInterest pointOfInterest = new PointOfInterest(0,
+                        lat, lng, name, borough, sideOfStreet, POIType);
+//                System.out.println("Parsed into POI: " + pointOfInterest);
+                try {
+                    pointOfInterestDAO.create(pointOfInterest);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                    System.err.println("Couldn't write row to database, skipping:  " + row);
+                    csvWriter.write(row);
+                    csvWriter.newLine();
+                }
+
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                System.err.println("Error Parsing row:  " + row);
+                csvWriter.write(row);
+                csvWriter.newLine();
+                e.printStackTrace();
+            }
+        }
+        csvWriter.close();
+        csvReader.close();
+    }
+
 }

@@ -31,8 +31,8 @@ public class PointOfInterestDAO extends DestinationDAO {
         create(DestPointOfInterest);
         PointOfInterest.setKey(DestPointOfInterest.getKey());
         String insertPointOfInterest =
-                "INSERT INTO point_of_interest(point_of_interestpk, side_of_street, domain, borough, poitype, name)" +
-                        "VALUES(?,?,?,?,?,?);";
+                "INSERT INTO point_of_interest(point_of_interestpk, side_of_street, borough, poitype, name)" +
+                        "VALUES(?,?,?,?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         ResultSet resultKey = null;
@@ -41,10 +41,9 @@ public class PointOfInterestDAO extends DestinationDAO {
             insertStmt = connection.prepareStatement(insertPointOfInterest);
             insertStmt.setFloat(1, PointOfInterest.getKey());
             insertStmt.setInt(2, PointOfInterest.getSideOfStreet());
-            insertStmt.setString(3, PointOfInterest.getDomain());
-            insertStmt.setString(4, PointOfInterest.getBorough());
-            insertStmt.setString(5, PointOfInterest.getPOIType());
-            insertStmt.setString(6, PointOfInterest.getName());
+            insertStmt.setString(3, PointOfInterest.getBorough());
+            insertStmt.setString(4, PointOfInterest.getPOIType());
+            insertStmt.setString(5, PointOfInterest.getName());
 
             insertStmt.executeUpdate();
             return PointOfInterest;
@@ -63,7 +62,7 @@ public class PointOfInterestDAO extends DestinationDAO {
 
     public PointOfInterest getPointOfInterestByPointOfInterestID(long PointOfInterestID) throws SQLException {
         String selectPointOfInterest =
-                "SELECT point_of_interestpk, side_of_street, domain, borough, poitype, name, Longitude, Latitude " +
+                "SELECT point_of_interestpk, side_of_street, borough, poitype, name, Longitude, Latitude " +
                         "FROM point_of_interest " +
                         "JOIN destination d on point_of_interest.Point_of_InterestPK = d.DestinationPK " +
                         "WHERE Point_of_InterestPK=?;";
@@ -81,13 +80,12 @@ public class PointOfInterestDAO extends DestinationDAO {
                 float lat = results.getFloat("Latitude");
                 float lng = results.getFloat("Longitude");
 
-                String domain = results.getString("domain");
                 String name = results.getString("name");
                 String poitype = results.getString("poitype");
                 String borough = results.getString("borough");
 
                 int sideOfStreet = results.getInt("side_of_street");
-                PointOfInterest PointOfInterest = new PointOfInterest(PointOfInterestKey, lat, lng, name, borough, domain, sideOfStreet, poitype);
+                PointOfInterest PointOfInterest = new PointOfInterest(PointOfInterestKey, lat, lng, name, borough, sideOfStreet, poitype);
                 return PointOfInterest;
             }
         } catch (SQLException e) {
@@ -135,11 +133,6 @@ public class PointOfInterestDAO extends DestinationDAO {
                 case "type":
                     updateStmt.setString(2, updateValue);
                     PointOfInterest.setType(Destination.destinationType.valueOf(updateValue));
-                    break;
-                //point_of_interestpk, side_of_street, domain, borough, poitype, name
-                case "domain":
-                    updateStmt.setString(2, updateValue);
-                    PointOfInterest.setDomain(updateValue);
                     break;
                 case "poitype":
                     updateStmt.setString(2, updateValue);
