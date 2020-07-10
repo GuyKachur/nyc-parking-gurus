@@ -60,14 +60,19 @@ public class Uploader {
 
     public boolean uploadAirBnb() throws IOException {
         AirBNBDAO airBNBDAO = AirBNBDAO.getInstance();
-        String path = new File("extras/RawData/parking_gurus_ab_nyc_2019.csv").getAbsolutePath();
+        String path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parking_gurus_ab_nyc_2019.csv").getAbsolutePath();
         BufferedReader csvReader = new BufferedReader(new FileReader(path));
-        path = new File("parking_gurus_ab_nyc_2019-errors.csv").getAbsolutePath();
+        path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parking_gurus_ab_nyc_2019-errors.csv").getAbsolutePath();
         BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
         String row = csvReader.readLine(); //discard the first row of headers
-        boolean add = true;
+        int count = 0;
         while ((row = csvReader.readLine()) != null) {
+            if (count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
+            count++;
             try {
+
 //                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //doesnt split , inside quotes
                 String name = data[1];
@@ -108,14 +113,15 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total AirBNBs: " + count);
         return true;
     }
 
     public boolean uploadBusiness() throws IOException {
         BusinessDAO businessDAO = BusinessDAO.getInstance();
-        String path = new File("extras/RawData/business.csv").getAbsolutePath();
+        String path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\business.csv").getAbsolutePath();
         BufferedReader csvReader = new BufferedReader(new FileReader(path));
-        path = new File("extras/RawData/business-errors.csv").getAbsolutePath();
+        path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\business-errors.csv").getAbsolutePath();
         BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
 
         String row = csvReader.readLine(); //discard the first row of headers
@@ -171,6 +177,8 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total Businesses: " + count);
+
         return true;
     }
 
@@ -220,22 +228,27 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total Gardens: " + count);
+
         return true;
     }
 
     public boolean uploadCollision() throws IOException {
         CollisionDAO collisionDAO = CollisionDAO.getInstance();
-        String path = new File("extras/RawData/parking_gurus_collisions.csv").getAbsolutePath();
+        String path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parking_gurus_collisions.csv").getAbsolutePath();
         BufferedReader csvReader = new BufferedReader(new FileReader(new File(path)));
-        path = new File("extras/RawData/collisions-errors.csv").getAbsolutePath();
+        path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parking_gurus_collisions-errors.csv").getAbsolutePath();
         BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
 
         String row = csvReader.readLine(); //discard the first row of headers
         int count = 0;
-        while ((row = csvReader.readLine()) != null && count < 50) {
+        while ((row = csvReader.readLine()) != null) {
+            if (count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
             count++;
             try {
-                System.out.println("Parsing row: " + row);
+//                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
                 float lat=0.0F, lng = 0.0F;
                 if (!data[5].isEmpty()) {
@@ -262,7 +275,7 @@ public class Uploader {
                         !data[18].isEmpty() ? Integer.parseInt(data[18]) : 0
 
                 );
-                System.out.println("Parsed into Collision: " + collisionToInsert);
+//                System.out.println("Parsed into Collision: " + collisionToInsert);
                 try {
                     collisionDAO.create(collisionToInsert);
                 } catch (SQLException sqlException) {
@@ -281,22 +294,26 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total Collisions: " + count);
         return true;
     }
 
     public boolean uploadEmergencyResponse() throws IOException {
         EmergencyResponseDAO emergencyResponseDAO = EmergencyResponseDAO.getInstance();
-        String path = new File("extras/RawData/emergency_response.csv").getAbsolutePath();
+        String path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\emergency_response.csv").getAbsolutePath();
         BufferedReader csvReader = new BufferedReader(new FileReader(new File(path)));
-        path = new File("extras/RawData/emergency_response-errors.csv").getAbsolutePath();
+        path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\emergency_response-errors.csv").getAbsolutePath();
         BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
 
         String row = csvReader.readLine(); //discard the first row of headers
         int count = 0;
-        while ((row = csvReader.readLine()) != null && count < 50) {
+        while ((row = csvReader.readLine()) != null) {
+            if (count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
             count++;
             try {
-                System.out.println("Parsing row: " + row);
+//                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
                 float lat=0.0F, lng = 0.0F;
                 if (!data[5].isEmpty()) {
@@ -316,7 +333,7 @@ public class Uploader {
                         new SimpleDateFormat("MM/DD/YYYY hh:mm:ss").parse(data[3])
 
                 );
-                System.out.println("Parsed into EmergencyResponse: " + emergencyResponseToInsert);
+//                System.out.println("Parsed into EmergencyResponse: " + emergencyResponseToInsert);
                 try {
                     emergencyResponseDAO.create(emergencyResponseToInsert);
                 } catch (SQLException sqlException) {
@@ -335,22 +352,26 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total EmergencyResponses: " + count);
         return true;
     }
 
     public boolean uploadGraffiti() throws IOException {
         GraffitiDAO graffitiDAO = GraffitiDAO.getInstance();
-        String path = new File("extras/RawData/graffiti.csv").getAbsolutePath();
+        String path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\graffiti.csv").getAbsolutePath();
         BufferedReader csvReader = new BufferedReader(new FileReader(new File(path)));
-        path = new File("extras/RawData/graffiti-errors.csv").getAbsolutePath();
+        path = new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\graffiti-errors.csv").getAbsolutePath();
         BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
 
         String row = csvReader.readLine(); //discard the first row of headers
         int count = 0;
-        while ((row = csvReader.readLine()) != null && count < 50) {
+        while ((row = csvReader.readLine()) != null) {
+            if (count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
             count++;
             try {
-                System.out.println("Parsing row: " + row);
+//                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
                 float lat=0.0F, lng = 0.0F;
                 if (!data[10].isEmpty()) {
@@ -366,11 +387,11 @@ public class Uploader {
                         lng,
                         data[0],
                         standardizeBorough(data[1]),
-                        !data[14].isEmpty() ? Integer.parseInt(data[14]) : -1,
+                        !data[14].isEmpty() ? Integer.parseInt(data[14].replaceAll("\\.[0-9]+", "")) : -1,
                         new SimpleDateFormat("MM/DD/YYYY").parse(data[6])
 
                 );
-                System.out.println("Parsed into Graffiti: " + graffitiToInsert);
+//                System.out.println("Parsed into Graffiti: " + graffitiToInsert);
                 try {
                     graffitiDAO.create(graffitiToInsert);
                 } catch (SQLException sqlException) {
@@ -389,6 +410,7 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total Graffiti: " + count);
         return true;
     }
 
@@ -456,6 +478,7 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total Markets: " + count);
         return true;
     }
 
@@ -539,6 +562,7 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total Parks: " + count);
     }
 
 
@@ -628,6 +652,8 @@ public class Uploader {
         }
         csvWriter.close();
         csvReader.close();
+        System.out.println("Total PointsOfInterest: " + count);
+
     }
 
 }
