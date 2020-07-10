@@ -23,9 +23,6 @@ CREATE TABLE IF NOT EXISTS `nyc`.`User`
 (
     `UserName`     VARCHAR(45)  NOT NULL,
     `PasswordHash` VARCHAR(90)  NOT NULL,
-    `FirstName`    VARCHAR(45)  NULL,
-    `LastName`     VARCHAR(45)  NOT NULL,
-    `Email`        VARCHAR(320) NULL,
     PRIMARY KEY (`UserName`)
 )
     ENGINE = InnoDB;
