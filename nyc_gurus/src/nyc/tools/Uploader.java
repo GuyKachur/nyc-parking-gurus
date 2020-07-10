@@ -58,8 +58,10 @@ public class Uploader {
 
     public boolean uploadAirBnb() throws IOException {
         AirBNBDAO airBNBDAO = AirBNBDAO.getInstance();
-        BufferedReader csvReader = new BufferedReader(new FileReader("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parking_gurus_ab_nyc_2019.csv"));
-        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\parking_gurus_ab_nyc_2019-errors.csv")));
+        String path = new File("extras/RawData/parking_gurus_ab_nyc_2019.csv").getAbsolutePath();
+        BufferedReader csvReader = new BufferedReader(new FileReader(path));
+        path = new File("parking_gurus_ab_nyc_2019-errors.csv").getAbsolutePath();
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
         String row = csvReader.readLine(); //discard the first row of headers
         boolean add = true;
         while ((row = csvReader.readLine()) != null) {
@@ -109,8 +111,10 @@ public class Uploader {
 
     public boolean uploadBusiness() throws IOException {
         BusinessDAO businessDAO = BusinessDAO.getInstance();
-        BufferedReader csvReader = new BufferedReader(new FileReader("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\business.csv"));
-        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\business-errors.csv")));
+        String path = new File("extras/RawData/business.csv").getAbsolutePath();
+        BufferedReader csvReader = new BufferedReader(new FileReader(path));
+        path = new File("extras/RawData/business-errors.csv").getAbsolutePath();
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File(path)));
 
         String row = csvReader.readLine(); //discard the first row of headers
         int count = 0;
