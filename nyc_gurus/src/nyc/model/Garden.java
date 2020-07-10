@@ -3,29 +3,19 @@ package nyc.model;
 public class Garden extends Destination {
     protected String name;
     protected int zipCode;
-    protected String gardenType;
     protected String address;
     protected String neighborhood_name;
     protected String borough;
 
     public Garden(long key, float lat, float lng,
-                  String name, int zipCode, String GardenType, String address,
+                  String name, int zipCode, String address,
                   String neighborhood_name, String borough) {
         super(key, lat, lng, destinationType.garden);
         this.name = name;
         this.zipCode = zipCode;
-        this.gardenType = GardenType;
         this.address = address;
         this.neighborhood_name = neighborhood_name;
         this.borough = borough;
-    }
-
-    public String getGardenType() {
-        return gardenType;
-    }
-
-    public void setGardenType(String gardenType) {
-        this.gardenType = gardenType;
     }
 
     public String getAddress() {

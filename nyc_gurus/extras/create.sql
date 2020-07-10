@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Business`
 (
     `BusinessPK`       INT         NOT NULL AUTO_INCREMENT,
     `Industry`         VARCHAR(45) NULL,
-    `BusinessName`    VARCHAR(45) NULL,
+    `BusinessName`    VARCHAR(200) NULL,
     `Address building` VARCHAR(45) NULL,
     `Address St Name`  VARCHAR(45) NULL,
     `City`             VARCHAR(45) NULL,
@@ -255,9 +255,8 @@ CREATE TABLE IF NOT EXISTS `nyc`.`Market`
 CREATE TABLE IF NOT EXISTS `nyc`.`Garden`
 (
     `GardenPK` INT         NOT NULL AUTO_INCREMENT,
-    `gardenType`              VARCHAR(45) NULL,
-    `Name`              VARCHAR(45) NULL,
-    `Address`           VARCHAR(45) NULL,
+    `Name`              VARCHAR(200) NULL,
+    `Address`           VARCHAR(200) NULL,
     `Neighborhood_name` VARCHAR(45) NULL,
     `ZipCode`           VARCHAR(45) NULL,
     `Borough`           VARCHAR(45) NULL,

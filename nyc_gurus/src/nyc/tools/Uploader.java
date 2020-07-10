@@ -2,8 +2,10 @@ package nyc.tools;
 
 import nyc.dal.AirBNBDAO;
 import nyc.dal.BusinessDAO;
+import nyc.dal.GardenDAO;
 import nyc.model.AirBNB;
 import nyc.model.Business;
+import nyc.model.Garden;
 
 import java.io.*;
 import java.security.cert.CertificateRevokedException;
@@ -15,19 +17,24 @@ public class Uploader {
     public String standardizeBorough(String incomingBorough) {
         switch (incomingBorough.toLowerCase()) {
             case "1":
+            case "m":
             case "manhattan":
                 return "Manhattan";
             case "2":
+            case "x":
             case "bronx":
                 return "Bronx";
             case "3":
+            case "b":
             case "brooklyn":
                 return "Brooklyn";
             case "4":
+            case "q":
             case "queens":
                 return "Queens";
 
             case "5":
+            case "s":
             case "staten island":
                 return "Staten Island";
 
@@ -43,7 +50,7 @@ public class Uploader {
             case "new jersey":
                 return "New Jersey";
             case "":
-                return "Unknown";
+                return "Missing";
             default:
                 return incomingBorough;
         }
@@ -107,10 +114,13 @@ public class Uploader {
 
         String row = csvReader.readLine(); //discard the first row of headers
         int count = 0;
-        while ((row = csvReader.readLine()) != null && count < 50) {
+        while ((row = csvReader.readLine()) != null) {
+            if(count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
             count++;
             try {
-                System.out.println("Parsing row: " + row);
+//                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //doesnt split , inside quotes
                 Float lat=0.0F, lng = 0.0F;
                 if (!data[25].isEmpty()) {
@@ -119,24 +129,75 @@ public class Uploader {
                 if (!data[24].isEmpty()) {
                     Float.parseFloat(data[24]);
                 }
+                String phone = data[14].replaceAll("[^\\d]", "");
+                String zip = data[13].replaceAll("\\.[0-9]+", "");
 
                 Business businessToInsert = new Business(
                         0L,
                         lat,
                         lng,
                         data[5],
-                        data[6],
+                        data[6].replaceAll("\"", ""),
                         data[8],
                         data[9],
                         data[11],
                         data[12],
-                        Integer.parseInt(data[13].substring(0, data[13].indexOf("."))),
-                        Long.parseLong(data[14].replaceAll("[^\\d]", "")),
+                        zip.isEmpty()? 0 : Integer.parseInt(zip),
+                        phone.isEmpty()? 0L : Long.parseLong(phone),
                         standardizeBorough(data[15])
                 );
-                System.out.println("Parsed into Business: " + businessToInsert);
+//                System.out.println("Parsed into Business: " + businessToInsert);
                 try {
                     businessDAO.create(businessToInsert);
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                    System.err.println("Couldn't write row to database, skipping:  " + row);
+                    csvWriter.write(row);
+                    csvWriter.newLine();
+                }
+
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                System.err.println("Error Parsing row:  " + row);
+                csvWriter.write(row);
+                csvWriter.newLine();
+                e.printStackTrace();
+            }
+        }
+        csvWriter.close();
+        csvReader.close();
+        return true;
+    }
+
+    public boolean uploadGarden() throws IOException {
+        GardenDAO gardenDAO = GardenDAO.getInstance();
+        BufferedReader csvReader = new BufferedReader(new FileReader(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\gardens.csv").getAbsolutePath()));
+        BufferedWriter csvWriter = new BufferedWriter(new FileWriter(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\gardens-errors.csv")));
+
+        String row = csvReader.readLine(); //discard the first row of headers
+        int count = 0;
+        while ((row = csvReader.readLine()) != null) {
+            if(count % 1000 == 0) {
+                System.out.println("Processed " + count);
+            }
+            count++;
+            try {
+//                System.out.println("Parsing row: " + row);
+                String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //doesnt split , inside quotes
+
+                String zip = data[13].replaceAll("\\.[0-9]+", "");
+
+
+                float lat = data[10].isEmpty()? 0F : Float.parseFloat(data[10]);
+                float lng = data[11].isEmpty()? 0F : Float.parseFloat(data[11]);
+                String name = data[4];
+                String address = data[4];
+                String borough = standardizeBorough(data[1]);
+                String neighborhood = data[8];
+
+                Garden gardenToInsert = new Garden(0,lat, lng, name, zip.isEmpty()? 0 : Integer.parseInt(zip), address, neighborhood, borough);
+//                System.out.println("Parsed into Garden: " + gardenToInsert);
+                try {
+                    gardenDAO.create(gardenToInsert);
                 } catch (SQLException sqlException) {
                     sqlException.printStackTrace();
                     System.err.println("Couldn't write row to database, skipping:  " + row);

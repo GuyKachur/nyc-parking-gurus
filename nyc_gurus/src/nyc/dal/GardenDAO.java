@@ -31,8 +31,8 @@ public class GardenDAO extends DestinationDAO {
         create(DestGarden);
         Garden.setKey(DestGarden.getKey());
         String insertGarden =
-                "INSERT INTO garden(gardenpk, gardentype, name, address, neighborhood_name, zipcode, borough)" +
-                        "VALUES(?,?,?,?,?,?,?,?,?,?);";
+                "INSERT INTO garden(gardenpk, name, address, neighborhood_name, zipcode, borough)" +
+                        "VALUES(?,?,?,?,?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         ResultSet resultKey = null;
@@ -40,12 +40,11 @@ public class GardenDAO extends DestinationDAO {
             connection = connectionManager.getConnection();
             insertStmt = connection.prepareStatement(insertGarden);
             insertStmt.setFloat(1, Garden.getKey());
-            insertStmt.setString(2, Garden.getGardenType());
-            insertStmt.setString(3, Garden.getName());
-            insertStmt.setString(4, Garden.getAddress());
-            insertStmt.setString(5, Garden.getNeighborhood_name());
-            insertStmt.setInt(6, Garden.getZipCode());
-            insertStmt.setString(7, Garden.getBorough());
+            insertStmt.setString(2, Garden.getName());
+            insertStmt.setString(3, Garden.getAddress());
+            insertStmt.setString(4, Garden.getNeighborhood_name());
+            insertStmt.setInt(5, Garden.getZipCode());
+            insertStmt.setString(6, Garden.getBorough());
             insertStmt.executeUpdate();
             return Garden;
         } catch (SQLException e) {
@@ -89,7 +88,7 @@ public class GardenDAO extends DestinationDAO {
                 String borough = results.getString("borough");
 
                 int zip = results.getInt("zipcode");
-                Garden Garden = new Garden(GardenKey, lat, lng, name, zip, gardenType, address, neighborhood_name, borough);
+                Garden Garden = new Garden(GardenKey, lat, lng, name, zip, address, neighborhood_name, borough);
                 return Garden;
             }
         } catch (SQLException e) {
@@ -137,10 +136,6 @@ public class GardenDAO extends DestinationDAO {
                 case "type":
                     updateStmt.setString(2, updateValue);
                     Garden.setType(Destination.destinationType.valueOf(updateValue));
-                    break;
-                case "gardenType":
-                    updateStmt.setString(2, updateValue);
-                    Garden.setGardenType(updateValue);
                     break;
                 case "name":
                     updateStmt.setString(2, updateValue);

@@ -54,10 +54,11 @@ public class insert {
         Uploader up = new Uploader();
         try {
 //            up.uploadAirBnb();
-            up.uploadBusiness();
+//            up.uploadBusiness(); //work
+//            up.uploadGarden();
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
