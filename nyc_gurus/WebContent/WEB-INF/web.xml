@@ -2,20 +2,6 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
   <display-name>NYC Gurus</display-name>
   <welcome-file-list>
-    <welcome-file>FindUsers.jsp</welcome-file>
+    <welcome-file>UserCreate.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <servlet-name>createpark</servlet-name>
-    <servlet-class>nyc.model.dal.park.create</servlet-class>
-  </servlet>
-  <!--
-  <servlet>
-    <servlet-name>FindUsers</servlet-name>
-    <servlet-class>blog.servlet.FindUsers</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FindUsers</servlet-name>
-    <url-pattern>/findusers</url-pattern>
-  </servlet-mapping>
-  -->
 </web-app>

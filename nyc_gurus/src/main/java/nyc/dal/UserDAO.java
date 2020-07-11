@@ -4,6 +4,8 @@ import nyc.model.User;
 import nyc.tools.ConnectionManager;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
 	protected ConnectionManager connectionManager;
@@ -25,14 +27,16 @@ public class UserDAO {
 	 * This runs a INSERT statement.
 	 */
 	public User create(User user) throws SQLException {
-		String insertUser = "INSERT INTO User(Username, passwordhash) VALUES(?,?);";
+		String insertUser = "INSERT INTO User(UserName, PasswordHash, FirstName, LastName) VALUES(?,?,?,?);";
 		Connection connection = null;
 		PreparedStatement insertStmt = null;
 		try {
 			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
+			insertStmt = connection.prepareStatement(insertUser);
 			insertStmt.setString(1, user.getUserName());
 			insertStmt.setString(2, user.getPasswordHash());
+			insertStmt.setString(3, user.getFirstName());
+			insertStmt.setString(4, user.getLastName());
 			insertStmt.executeUpdate();
 
 			return user;
@@ -54,7 +58,7 @@ public class UserDAO {
 	 * This runs a UPDATE statement.
 	 */
 	public User updatePasswordHash(User user, String newPasswordHash) throws SQLException {
-		String updateUser = "UPDATE User SET passwordhash=? WHERE Username=?;";
+		String updateUser = "UPDATE User SET PasswordHash=? WHERE UserName=?;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {
@@ -85,7 +89,7 @@ public class UserDAO {
 	 * This runs a DELETE statement.
 	 */
 	public User delete(User user) throws SQLException {
-		String deleteUser = "DELETE FROM User WHERE Username=?;";
+		String deleteUser = "DELETE FROM User WHERE UserName=?;";
 		Connection connection = null;
 		PreparedStatement deleteStmt = null;
 		try {
@@ -127,7 +131,9 @@ public class UserDAO {
 			if(results.next()) {
 				String resultUserName = results.getString("Username");
 				String passwordHash = results.getString("passwordhash");
-				User user = new User(resultUserName, passwordHash);
+				String resultFirstName = results.getString("FirstName");
+				String lastName = results.getString("LastName");
+				User user = new User(resultUserName, passwordHash, resultFirstName, lastName);
 				return user;
 			}
 		} catch (SQLException e) {
@@ -145,5 +151,48 @@ public class UserDAO {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Get the all the Users for a firstname.
+	 */
+	public List<User> getUsersByFirstName(String firstName) throws SQLException {
+		List<User> users = new ArrayList<User>();
+		String selectUsers =
+			"SELECT UserName,PasswordHash,FirstName,LastName " +
+			"FROM User " +
+			"WHERE FirstName=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectUsers);
+			selectStmt.setString(1, firstName);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				String userName = results.getString("UserName");
+				String passwordHash = results.getString("PasswordHash");
+				String resultFirstName = results.getString("FirstName");
+				String lastName = results.getString("LastName");
+				
+				User user = new User(userName, passwordHash, resultFirstName, lastName);
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return users;
 	}
 }
