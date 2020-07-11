@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class Find extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+    	System.out.println("Get in find");
         // Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
@@ -99,6 +100,7 @@ public class Find extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+    	System.out.println("Post in Find");
         // Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
@@ -136,14 +138,31 @@ public class Find extends HttpServlet {
                 case "point_of_interest":
                     String name = req.getParameter("name");
                     if (name == null || name.trim().isEmpty()) {
-                        PointOfInterest point = FindPointOfInterest(req);
-                        messages.put("success", "Found Point Of Interest: " + point.getKey());
-                        req.setAttribute("point_of_interest", point);
+                    	String id = req.getParameter("id");
+                    	if(id == null || id.trim().isEmpty()) {
+                    		messages.put("success", "ID incorrect");
+                    	} else {
+                    		List<PointOfInterest> points = new ArrayList<>();
+                            PointOfInterest point = FindPointOfInterest(req);
+                            if(point == null) {
+                            	messages.put("success", "Point not in database");
+                            } else {
+                                points.add(point);
+                                messages.put("success", "Found Point Of Interest: " + point.getKey());
+                                req.setAttribute("points_of_interest", points );
+                                req.setAttribute("id", point.getKey());
+                            }
+
+                    	}
                     } else {
-                        List<PointOfInterest> points = FindPointsOfInterest(name);
+                        List<PointOfInterest> points_of_interest = FindPointsOfInterest(name);
                         messages.put("success", "Found Points Of Interest containing : " + name);
-                        req.setAttribute("points_of_interest", points);
+                        req.setAttribute("points_of_interest", points_of_interest);
+                        req.setAttribute("name", name);
+                        System.out.println(points_of_interest);
                     }
+
+                    req.getRequestDispatcher("/PointOfInterestFind.jsp").forward(req, resp);
                     break;
                 case "collision":
                     Collision collision = FindCollision(req);
@@ -166,7 +185,7 @@ public class Find extends HttpServlet {
 
         }
         //TODO check this? -> should map the to file names? or should just end each break statement with this
-        req.getRequestDispatcher("/Find?object=" + databaseObject + ".jsp").forward(req, resp);
+//        req.getRequestDispatcher("/Find?object=" + databaseObject + ".jsp").forward(req, resp);
 
     }
 

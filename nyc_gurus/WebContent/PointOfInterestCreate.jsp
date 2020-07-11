@@ -12,7 +12,7 @@
 </head>
 <body>
 <h1>Create Point of Interest</h1>
-<form action="create?object=point_of_interest" method="post">
+<form action="create" method="post">
     <p>
         <label for="lat">Latitude</label>
         <input id="lat" name="lat" value="">
@@ -35,9 +35,10 @@
     </p>
     <p>
         <label for="type">Type</label>
-        <input id="type" name="side_of_street" type="">
+        <input id="type" name="type" value="">
     </p>
     <p>
+    <input id="object" name="object" value="point_of_interest" style="display:none">
         <input type="submit">
     </p>
 </form>

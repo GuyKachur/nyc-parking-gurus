@@ -202,7 +202,8 @@ public class PointOfInterestDAO extends DestinationDAO {
     }
 
     public List<PointOfInterest> getPointsOfInterestByName(String searchName) throws SQLException {
-        List<PointOfInterest> returnList = new ArrayList<>(100);
+        System.out.println("getting points for name: " + searchName );
+        List<PointOfInterest> returnList = new ArrayList<>();
         String selectPointOfInterest =
                 "SELECT point_of_interestpk, side_of_street, borough, poitype, name, Longitude, Latitude " +
                         "FROM point_of_interest " +
@@ -216,6 +217,8 @@ public class PointOfInterestDAO extends DestinationDAO {
             selectStmt = connection.prepareStatement(selectPointOfInterest);
             selectStmt.setString(1, '%'+ searchName +'%');
             results = selectStmt.executeQuery();
+            System.out.println("results: " + results );
+            
             while(results.next() && returnList.size() < 100) {
 
                 long PointOfInterestKey = results.getLong("point_of_interestpk");
@@ -228,6 +231,7 @@ public class PointOfInterestDAO extends DestinationDAO {
 
                 int sideOfStreet = results.getInt("side_of_street");
                 PointOfInterest pointOfInterest = new PointOfInterest(PointOfInterestKey, lat, lng, name, borough, sideOfStreet, poitype);
+                System.out.println("Point Found: " + pointOfInterest );
                 returnList.add(pointOfInterest);
             }
         } catch (SQLException e) {
@@ -244,6 +248,6 @@ public class PointOfInterestDAO extends DestinationDAO {
                 results.close();
             }
         }
-        return null;
+        return returnList;
     }
 }

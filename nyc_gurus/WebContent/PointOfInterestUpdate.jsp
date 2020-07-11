@@ -39,7 +39,7 @@
     </p>
     <p>
         <label for="type">Type</label>
-        <input id="type" name="type" type="">
+        <input id="type" name="type" value="">
     </p>
     <p>
         <input type="submit">

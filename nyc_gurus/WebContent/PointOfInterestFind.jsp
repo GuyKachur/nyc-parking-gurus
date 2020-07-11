@@ -8,16 +8,21 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Find a User</title>
+    <title>Find a Point Of Interest</title>
 </head>
 <body>
-<form action="/find?object=point_of_interest" method="post">
+<form action="find" method="post">
     <h1>Search for a Point of interest whose name contains</h1>
     <p>
-        <label for="name">name</label>
+        <label for="name">Name</label>
         <input id="name" name="name" value="${fn:escapeXml(param.name)}">
     </p>
+        <p>
+        <label for="id">ID</label>
+        <input id="id" name="id" value="${fn:escapeXml(param.id)}">
+    </p>
     <p>
+    <input id="object" name="object" value="point_of_interest" style="display:none">
         <input type="submit">
         <br/><br/><br/>
         <span id="successMessage"><b>${messages.success}</b></span>
@@ -31,18 +36,16 @@
     <tr>
         <th>Name</th>
         <th>Side of Street</th>
-        <th>Domain</th>
         <th>Borough</th>
         <th>Type</th>
         <th>ID</th>
         <th>Delete Point</th>
         <th>Update Point</th>
     </tr>
-    <c:forEach items="${PointOfInterest}" var="pointOfInterest">
+    <c:forEach items="${points_of_interest}" var="PointOfInterest">
         <tr>
             <td><c:out value="${PointOfInterest.getName()}"/></td>
             <td><c:out value="${PointOfInterest.getSideOfStreet()}"/></td>
-            <td><c:out value="${PointOfInterest.getDomain()}"/></td>
             <td><c:out value="${PointOfInterest.getBorough()}"/></td>
             <td><c:out value="${PointOfInterest.getType()}"/></td>
             <td><c:out value="${PointOfInterest.getKey()}"/></td>

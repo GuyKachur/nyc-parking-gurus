@@ -18,7 +18,7 @@
         <label for="object">Object</label>
         <input id="object" name="object" value="${fn:escapeXml(param.object)}">
         <label for="id">ID to Delete</label>
-        <input id="id" name="object" value="${fn:escapeXml(param.id)}">
+        <input id="id" name="id" value="${fn:escapeXml(param.id)}">
     </div>
     </p>
     <p>

@@ -81,7 +81,7 @@ public class Delete extends HttpServlet {
                     req.getRequestDispatcher("/ParkDelete.jsp").forward(req, resp);
                     break;
                 case "point_of_interest":
-                    req.getRequestDispatcher("/PointOfInterestDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/Delete.jsp").forward(req, resp);
                     break;
                 case "collision":
                     req.getRequestDispatcher("/CollisionDelete.jsp").forward(req, resp);
@@ -140,6 +140,7 @@ public class Delete extends HttpServlet {
                     if (DeletePointOfInterest(req)) {
                         messages.put("success", "Deleted Point Of Interest");
                     }
+                    req.getRequestDispatcher("PointOfInterestFind.jsp").forward(req, resp);
                     break;
                 case "collision":
                     if (DeleteCollision(req)) {
@@ -163,7 +164,7 @@ public class Delete extends HttpServlet {
         }
         //TODO check this? -> should map the to file names?
         // or return to homepage?
-        req.getRequestDispatcher("/Delete?object=" + databaseObject + ".jsp").forward(req, resp);
+//        req.getRequestDispatcher("/Delete?object=" + databaseObject + ".jsp").forward(req, resp);
 
     }
 

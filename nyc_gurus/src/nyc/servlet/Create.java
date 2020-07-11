@@ -51,20 +51,6 @@ public class Create extends HttpServlet {
         userDAO = UserDAO.getInstance();
 
     }
-//
-//    public void yes(String queryParams) {
-//        if( queryParams == null || queryParams.trim().isEmpty()) {
-//            List<String> tuples = Arrays.asList(queryParams.split("&"));
-//            for (String tup:
-//                 tuples) {
-//
-//
-//            }
-//        } else {
-//
-//        }
-//
-//    }
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -175,8 +161,6 @@ public class Create extends HttpServlet {
             }
 
         }
-        //TODO check this? -> should map the to file names?
-        req.getRequestDispatcher("/Create?object=" + databaseObject + ".jsp").forward(req, resp);
 
     }
 
@@ -230,9 +214,11 @@ public class Create extends HttpServlet {
         String borough = req.getParameter("borough");
         String stringSideOfStreet = req.getParameter("side_of_street");
         String poiType = req.getParameter("type");
+        
         try {
             PointOfInterest point = new PointOfInterest(0, fixFloat(stringLat), fixFloat(stringLng), name, borough, fixInt(stringSideOfStreet), poiType);
             pointOfInterestDAO.create(point);
+            System.out.println(point);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
