@@ -1,23 +1,16 @@
 package nyc.model;
 
-/**
- * Represents a violation
- */
-public class Violation {
+public class Destination {
     protected long Key;
     protected float lat;
     protected float lng;
-    protected ViolationType type;
+    protected destinationType destType;
 
-    public enum ViolationType {
-        emergencyResponse, collision, graffiti
-    }
-
-    public Violation(long key, float lat, float lng, ViolationType type) {
+    public Destination(long key, float lat, float lng, destinationType type) {
         this.Key = key;
         this.lat = lat;
         this.lng = lng;
-        this.type = type;
+        this.destType = type;
     }
 
     public long getKey() {
@@ -44,21 +37,25 @@ public class Violation {
         this.lng = lng;
     }
 
-    public ViolationType getType() {
-        return type;
+    public destinationType getType() {
+        return destType;
     }
 
-    public void setType(ViolationType type) {
-        this.type = type;
+    public void setType(destinationType type) {
+        this.destType = type;
     }
 
     @Override
     public String toString() {
-        return "Violation{" +
+        return "Destination{" +
                 "Key=" + Key +
                 ", lat=" + lat +
                 ", lng=" + lng +
-                ", type=" + type +
+                ", type=" + destType +
                 '}';
+    }
+
+    public enum destinationType {
+        park, business, market, airbnb, garden, poi
     }
 }

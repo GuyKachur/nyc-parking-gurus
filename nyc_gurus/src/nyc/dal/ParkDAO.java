@@ -10,10 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ParkDAO extends DestinationDAO {
-    protected ConnectionManager connectionManager;
-
     // Single pattern: instantiation is limited to one object.
     private static ParkDAO instance = null;
+    protected ConnectionManager connectionManager;
 
     protected ParkDAO() {
         connectionManager = new ConnectionManager();

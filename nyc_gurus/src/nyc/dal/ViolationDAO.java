@@ -1,52 +1,52 @@
 package nyc.dal;
 
-import nyc.model.Destination;
+import nyc.model.Violation;
 import nyc.tools.ConnectionManager;
 
 import java.sql.*;
 
-public class DestinationDAO {
+public class ViolationDAO {
+    // Single pattern: instantiation is limited to one object.
+    private static ViolationDAO instance = null;
     protected ConnectionManager connectionManager;
 
-    // Single pattern: instantiation is limited to one object.
-    private static DestinationDAO instance = null;
-
-    protected DestinationDAO() {
+    protected ViolationDAO() {
         connectionManager = new ConnectionManager();
     }
 
-    public static DestinationDAO getInstance() {
+    public static ViolationDAO getInstance() {
         if (instance == null) {
-            instance = new DestinationDAO();
+            instance = new ViolationDAO();
         }
         return instance;
     }
-    public Destination create(Destination Destination) throws SQLException {
-        String insertDestination =
-                "INSERT INTO Destination(latitude, longitude, destinationtype) " +
+
+    public Violation create(Violation Violation) throws SQLException {
+        String insertViolation =
+                "INSERT INTO violation(latitude, longitude, violationtype) " +
                         "VALUES(?,?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         ResultSet resultKey = null;
         try {
             connection = connectionManager.getConnection();
-            insertStmt = connection.prepareStatement(insertDestination,
+            insertStmt = connection.prepareStatement(insertViolation,
                     Statement.RETURN_GENERATED_KEYS);
-            insertStmt.setFloat(1, Destination.getLat());
-            insertStmt.setFloat(2, Destination.getLng());
-            insertStmt.setString(3, Destination.getType().name());
+            insertStmt.setFloat(1, Violation.getLat());
+            insertStmt.setFloat(2, Violation.getLng());
+            insertStmt.setString(3, Violation.getType().name());
             insertStmt.executeUpdate();
 
             // Retrieve the auto-generated key and set it, so it can be used by the caller.
             resultKey = insertStmt.getGeneratedKeys();
-            int DestinationID = -1;
+            int ViolationID = -1;
             if (resultKey.next()) {
-                DestinationID = resultKey.getInt(1);
+                ViolationID = resultKey.getInt(1);
             } else {
                 throw new SQLException("Unable to retrieve auto-generated key.");
             }
-            Destination.setKey(DestinationID);
-            return Destination;
+            Violation.setKey(ViolationID);
+            return Violation;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -63,27 +63,33 @@ public class DestinationDAO {
         }
     }
 
-    public Destination getDestinationByDestinationID(long DestinationID) throws SQLException {
-        String selectDestination =
-                "SELECT destinationpk, latitude, longitude, destinationtype " +
-                        "FROM Destination " +
-                        "WHERE DestinationPK=?;";
+    /**
+     * Gets the Violation from Mysql by Violation Name
+     *
+     * @param
+     * @return
+     * @throws SQLException
+     */
+    public Violation getViolationByViolationID(long ViolationID) throws SQLException {
+        String selectViolation =
+                "SELECT ViolationPK, Latitude, Longitude, violationType " +
+                        "FROM violation " +
+                        "WHERE ViolationPK=?;";
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
         try {
             connection = connectionManager.getConnection();
-            selectStmt = connection.prepareStatement(selectDestination);
-            selectStmt.setLong(1, DestinationID);
+            selectStmt = connection.prepareStatement(selectViolation);
+            selectStmt.setLong(1, ViolationID);
             results = selectStmt.executeQuery();
             if (results.next()) {
-                long DestinationKey = results.getLong("DestinationPK");
+                long ViolationKey = results.getLong("violationpk");
                 float lat = results.getFloat("latitude");
                 float lng = results.getFloat("longitude");
-                Destination.destinationType type = Destination.destinationType.valueOf(results.getString("type"));
-               Destination Destination = new Destination( DestinationKey, lat, lng, type);
-               Destination.setKey(DestinationID);
-               return Destination;
+                Violation.ViolationType type = Violation.ViolationType.valueOf(results.getString("type"));
+                Violation violation = new Violation(ViolationKey, lat, lng, type);
+                return violation;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,39 +108,46 @@ public class DestinationDAO {
         return null;
     }
 
-    public Destination updateCOL(Destination Destination, String columnName, String updateValue) throws SQLException {
-        String updateDestination = "UPDATE Destination SET ?=? WHERE DestinationPK=?;";
+    /**
+     * Updates the companies description
+     *
+     * @param Violation
+     * @param
+     * @return
+     * @throws SQLException
+     */
+    public Violation updateCOL(Violation Violation, String columnName, String updateValue) throws SQLException {
+        String updateViolation = "UPDATE violation SET ?=? WHERE violationpk=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
         try {
             connection = connectionManager.getConnection();
-            updateStmt = connection.prepareStatement(updateDestination);
+            updateStmt = connection.prepareStatement(updateViolation);
             updateStmt.setString(1, columnName);
-
-            updateStmt.setLong(3, Destination.getKey());
+            updateStmt.setLong(3, Violation.getKey());
             updateStmt.executeUpdate();
 
-            switch(columnName) {
+            switch (columnName) {
                 case "lat":
                     updateStmt.setFloat(2, Float.parseFloat(updateValue));
-                    Destination.setLat(Float.parseFloat(updateValue));
+                    Violation.setLat(Float.parseFloat(updateValue));
                     break;
                 case "lng":
                     updateStmt.setFloat(2, Float.parseFloat(updateValue));
-                    Destination.setLng(Float.parseFloat(updateValue));
+                    Violation.setLng(Float.parseFloat(updateValue));
                     break;
                 case "key":
                     updateStmt.setLong(2, Long.parseLong(updateValue));
-                    Destination.setKey(Long.parseLong(updateValue));
+                    Violation.setKey(Long.parseLong(updateValue));
                     break;
                 case "type":
                     updateStmt.setString(2, updateValue);
-                    Destination.setType(nyc.model.Destination.destinationType.valueOf(updateValue));
+                    Violation.setType(nyc.model.Violation.ViolationType.valueOf(updateValue));
                     break;
                 default:
                     throw new SQLException("COl [" + columnName + "] not found");
             }
-            return Destination;
+            return Violation;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -149,22 +162,23 @@ public class DestinationDAO {
     }
 
     /**
-     * Deletes the Destination from the database
-     * @param Destination
+     * Deletes the Violation from the database
+     *
+     * @param Violation
      * @return
      * @throws SQLException
      */
-    public Destination delete(Destination Destination) throws SQLException {
-        String deleteDestination = "DELETE FROM Destination WHERE Destinationpk=?;";
+    public Violation delete(Violation Violation) throws SQLException {
+        String deleteViolation = "DELETE FROM violation WHERE violationpk=?;";
         Connection connection = null;
         PreparedStatement deleteStmt = null;
         try {
             connection = connectionManager.getConnection();
-            deleteStmt = connection.prepareStatement(deleteDestination);
-            deleteStmt.setLong(1, Destination.getKey());
+            deleteStmt = connection.prepareStatement(deleteViolation);
+            deleteStmt.setLong(1, Violation.getKey());
             deleteStmt.executeUpdate();
 
-            // Return null so the caller can no longer operate on the Destinations instance.
+            // Return null so the caller can no longer operate on the Violations instance.
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -178,7 +192,6 @@ public class DestinationDAO {
             }
         }
     }
-    
 
 
 }

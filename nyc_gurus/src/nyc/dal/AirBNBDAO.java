@@ -10,10 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AirBNBDAO extends DestinationDAO {
-    protected ConnectionManager connectionManager;
-
     // Single pattern: instantiation is limited to one object.
     private static AirBNBDAO instance = null;
+    protected ConnectionManager connectionManager;
 
     protected AirBNBDAO() {
         connectionManager = new ConnectionManager();
@@ -25,6 +24,7 @@ public class AirBNBDAO extends DestinationDAO {
         }
         return instance;
     }
+
     public AirBNB create(AirBNB airbnb) throws SQLException {
         Destination DestAirBNB = new Destination(airbnb.getKey(), airbnb.getLat(), airbnb.getLng(), airbnb.getType());
         create(DestAirBNB);
@@ -112,7 +112,7 @@ public class AirBNBDAO extends DestinationDAO {
         return null;
     }
 
-    public AirBNB  updateCOL( AirBNB Airbnb, String columnName, String updateValue) throws SQLException {
+    public AirBNB updateCOL(AirBNB Airbnb, String columnName, String updateValue) throws SQLException {
         String updateAirbnb = "UPDATE Airbnb SET ?=? WHERE Airbnbpk=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
@@ -123,7 +123,7 @@ public class AirBNBDAO extends DestinationDAO {
             updateStmt.setLong(3, Airbnb.getKey());
             updateStmt.executeUpdate();
 
-            switch(columnName) {
+            switch (columnName) {
                 case "lat":
                     updateStmt.setFloat(2, Float.parseFloat(updateValue));
                     Airbnb.setLat(Float.parseFloat(updateValue));
@@ -191,6 +191,7 @@ public class AirBNBDAO extends DestinationDAO {
 
     /**
      * Deletes the Airbnb from the database
+     *
      * @param Airbnb
      * @return
      * @throws SQLException
@@ -219,7 +220,6 @@ public class AirBNBDAO extends DestinationDAO {
             }
         }
     }
-
 
 
 }

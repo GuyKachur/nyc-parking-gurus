@@ -49,13 +49,14 @@ group by name
 order by distance;
 
 -- what are the total number of people injured and killed from collisions per borough?
-select BOROUGH, sum(INJURED) as TotalInjured,
-       sum(KILLED) as TotalKilled,
-       sum(INJURED + KILLED) as TOTAl
-       from (
 select BOROUGH,
-       `PEDESTRIANS INJURED` + `PERSONS INJURED` + `MOTORISTS INJURED` + `CYCLISTS INJURED` as INJURED,
-       `PEDESTRIANS KILLED` + `PERSONS KILLED` + `MOTORISTS KILLED` + `CYCLISTS KILLED` as KILLED
-from parking_gurus.collisions) as pre
+       sum(INJURED)          as TotalInjured,
+       sum(KILLED)           as TotalKilled,
+       sum(INJURED + KILLED) as TOTAl
+from (
+         select BOROUGH,
+                `PEDESTRIANS INJURED` + `PERSONS INJURED` + `MOTORISTS INJURED` + `CYCLISTS INJURED` as INJURED,
+                `PEDESTRIANS KILLED` + `PERSONS KILLED` + `MOTORISTS KILLED` + `CYCLISTS KILLED`     as KILLED
+         from parking_gurus.collisions) as pre
 group by BOROUGH
 order by total desc;

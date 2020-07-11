@@ -4,23 +4,20 @@ package nyc.servlet;
 import nyc.dal.*;
 import nyc.model.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.servlet.annotation.*;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-@WebServlet("/delete")
-public class Delete extends HttpServlet {
+@WebServlet("/find")
+public class Find extends HttpServlet {
 
     protected AirBNBDAO airBNBDAO;
     protected BusinessDAO businessDAO;
@@ -66,31 +63,31 @@ public class Delete extends HttpServlet {
         } else {
             switch (databaseObject) {
                 case "airbnb":
-                    req.getRequestDispatcher("/AirBNBDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/AirBNBFind.jsp").forward(req, resp);
                     break;
                 case "business":
-                    req.getRequestDispatcher("/BusinessDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/BusinessFind.jsp").forward(req, resp);
                     break;
                 case "garden":
-                    req.getRequestDispatcher("/GardenDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/GardenFind.jsp").forward(req, resp);
                     break;
                 case "market":
-                    req.getRequestDispatcher("/MarketDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/MarketFind.jsp").forward(req, resp);
                     break;
                 case "park":
-                    req.getRequestDispatcher("/ParkDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/ParkFind.jsp").forward(req, resp);
                     break;
                 case "point_of_interest":
-                    req.getRequestDispatcher("/PointOfInterestDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/PointOfInterestFind.jsp").forward(req, resp);
                     break;
                 case "collision":
-                    req.getRequestDispatcher("/CollisionDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/CollisionFind.jsp").forward(req, resp);
                     break;
                 case "emergency_response":
-                    req.getRequestDispatcher("/EmergencyResponseDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/EmergencyResponseFind.jsp").forward(req, resp);
                     break;
                 case "graffiti":
-                    req.getRequestDispatcher("/GraffitiDelete.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/GraffitiFind.jsp").forward(req, resp);
                     break;
                 default:
                     req.getRequestDispatcher("/404.jsp").forward(req, resp);
@@ -112,49 +109,56 @@ public class Delete extends HttpServlet {
         } else {
             switch (databaseObject.toLowerCase()) {
                 case "airbnb":
-                    if (DeleteAirBNB(req)) {
-                        messages.put("success", "Deleted AirBNB");
-                    }
+                    AirBNB airBNB = FindAirBNB(req);
+                    messages.put("success", "Found AirBNB: " + airBNB.getKey());
+                    req.setAttribute("airbnb", airBNB);
                     break;
                 case "business":
-                    if (DeleteBusiness(req)) {
-                        messages.put("success", "Deleted Business");
-                    }
+                    Business business = FindBusiness(req);
+                    messages.put("success", "Found Business: " + business.getKey());
+                    req.setAttribute("business", business);
                     break;
                 case "garden":
-                    if (DeleteGarden(req)) {
-                        messages.put("success", "Deleted Garden");
-                    }
+                    Garden garden = FindGarden(req);
+                    messages.put("success", "Found Garden: " + garden.getKey());
+                    req.setAttribute("garden", garden);
                     break;
                 case "market":
-                    if (DeleteMarket(req)) {
-                        messages.put("success", "Deleted Market");
-                    }
+                    Market market = FindMarket(req);
+                    messages.put("success", "Found Market: " + market.getKey());
+                    req.setAttribute("market", market);
                     break;
                 case "park":
-                    if (DeletePark(req)) {
-                        messages.put("success", "Deleted Market");
-                    }
+                    Park park = FindPark(req);
+                    messages.put("success", "Found Park: " + park.getKey());
+                    req.setAttribute("park", park);
                     break;
                 case "point_of_interest":
-                    if (DeletePointOfInterest(req)) {
-                        messages.put("success", "Deleted Point Of Interest");
+                    String name = req.getParameter("name");
+                    if (name == null || name.trim().isEmpty()) {
+                        PointOfInterest point = FindPointOfInterest(req);
+                        messages.put("success", "Found Point Of Interest: " + point.getKey());
+                        req.setAttribute("point_of_interest", point);
+                    } else {
+                        //find by name
+                        List<PointOfInterest> points = FindPointsOfInterest(name);
                     }
+
                     break;
                 case "collision":
-                    if (DeleteCollision(req)) {
-                        messages.put("success", "Deleted Collision");
-                    }
+                    Collision collision = FindCollision(req);
+                    messages.put("success", "Found Collision: " + collision.getKey());
+                    req.setAttribute("collision", collision);
                     break;
                 case "emergency_response":
-                    if (DeleteEmergencyResponse(req)) {
-                        messages.put("success", "Deleted Emergency Response");
-                    }
+                    EmergencyResponse emergency_response = FindEmergencyResponse(req);
+                    messages.put("success", "Found Emergency Response: " + emergency_response.getKey());
+                    req.setAttribute("emergency_response", emergency_response);
                     break;
                 case "graffiti":
-                    if (DeleteGraffiti(req)) {
-                        messages.put("success", "Deleted Graffiti");
-                    }
+                    Graffiti graffiti = FindGraffiti(req);
+                    messages.put("success", "Found Graffiti: " + graffiti.getKey());
+                    req.setAttribute("graffiti", graffiti);
                     break;
                 default:
                     req.getRequestDispatcher("/404.jsp").forward(req, resp);
@@ -162,39 +166,8 @@ public class Delete extends HttpServlet {
 
         }
         //TODO check this? -> should map the to file names?
-        // or return to homepage?
-        req.getRequestDispatcher("/Delete?object=" + databaseObject + ".jsp").forward(req, resp);
+        req.getRequestDispatcher("/Find?object=" + databaseObject + ".jsp").forward(req, resp);
 
-    }
-
-    private float fixFloat(String input) throws IOException {
-        float floatValue = 0.0F;
-        if (input == null || input.trim().isEmpty()) {
-            return floatValue;
-        } else {
-            try {
-                floatValue = Float.parseFloat(input);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                throw new IOException(e);
-            }
-        }
-        return floatValue;
-    }
-
-    private int fixInt(String input) throws IOException {
-        int intValue = 0;
-        if (input == null || input.trim().isEmpty()) {
-            return intValue;
-        } else {
-            try {
-                intValue = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                throw new IOException(e);
-            }
-        }
-        return intValue;
     }
 
     private long fixLong(String input) throws IOException {
@@ -212,125 +185,103 @@ public class Delete extends HttpServlet {
         return lngValue;
     }
 
-    private Date fixDate(String input) throws IOException {
-        // dob must be in the format yyyy-mm-dd.
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+    private List<PointOfInterest> FindPointsOfInterest(String name) throws IOException {
         try {
-            date = dateFormat.parse(input);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            throw new IOException(e);
-        }
-        return date;
-    }
-
-    private boolean DeletePointOfInterest(HttpServletRequest req) throws IOException {
-        String id = req.getParameter("id");
-        try {
-            PointOfInterest point = pointOfInterestDAO.getPointOfInterestByPointOfInterestID(fixLong(id));
-            pointOfInterestDAO.delete(point);
+            return pointOfInterestDAO.getPointsOfInterestByName(name);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
-
-    private boolean DeleteAirBNB(HttpServletRequest req) throws IOException {
+    private PointOfInterest FindPointOfInterest(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            AirBNB airBNB = airBNBDAO.getAirbnbByAirbnbID(fixLong(id));
-            airBNBDAO.delete(airBNB);
+            return pointOfInterestDAO.getPointOfInterestByPointOfInterestID(fixLong(id));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
-    private boolean DeleteBusiness(HttpServletRequest req) throws IOException {
+    private AirBNB FindAirBNB(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            Business business = businessDAO.getBusinessByBusinessID(fixLong(id));
-            businessDAO.delete(business);
+            return airBNBDAO.getAirbnbByAirbnbID(fixLong(id));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
-    private boolean DeleteCollision(HttpServletRequest req) throws IOException {
+    private Business FindBusiness(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            Collision collision = collisionDAO.getCollisionByID(fixLong(id));
-            collisionDAO.delete(collision);
+            return businessDAO.getBusinessByBusinessID(fixLong(id));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
-    private boolean DeleteEmergencyResponse(HttpServletRequest req) throws IOException {
+    private Collision FindCollision(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            EmergencyResponse er = emergencyResponseDAO.getEmergencyResponseByID(fixLong(id));
-            emergencyResponseDAO.delete(er);
+            return collisionDAO.getCollisionByID(fixLong(id));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
-    private boolean DeleteGarden(HttpServletRequest req) throws IOException {
+    private EmergencyResponse FindEmergencyResponse(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            Garden garden = gardenDAO.getGardenByGardenID(fixLong(id));
-            gardenDAO.delete(garden);
+            return emergencyResponseDAO.getEmergencyResponseByID(fixLong(id));
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
-    private boolean DeleteGraffiti(HttpServletRequest req) throws IOException {
+    private Garden FindGarden(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            Graffiti graffiti = graffitiDAO.getGraffitiByID(fixLong(id));
-            graffitiDAO.delete(graffiti);
+            return gardenDAO.getGardenByGardenID(fixLong(id));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
-    private boolean DeleteMarket(HttpServletRequest req) throws IOException {
+    private Graffiti FindGraffiti(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            Market market = marketDAO.getMarketByMarketID(fixLong(id));
-            marketDAO.delete(market);
+            return graffitiDAO.getGraffitiByID(fixLong(id));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
-    private boolean DeletePark(HttpServletRequest req) throws IOException {
+    private Market FindMarket(HttpServletRequest req) throws IOException {
         String id = req.getParameter("id");
         try {
-            Park park = parkDAO.getParkByParkID(fixLong(id));
-            parkDAO.delete(park);
+            return marketDAO.getMarketByMarketID(fixLong(id));
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
+    }
+
+    private Park FindPark(HttpServletRequest req) throws IOException {
+        String id = req.getParameter("id");
+        try {
+            return parkDAO.getParkByParkID(fixLong(id));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IOException(e);
+        }
     }
 
 }

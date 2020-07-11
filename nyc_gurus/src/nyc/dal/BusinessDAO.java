@@ -10,10 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BusinessDAO extends DestinationDAO {
-    protected ConnectionManager connectionManager;
-
     // Single pattern: instantiation is limited to one object.
     private static BusinessDAO instance = null;
+    protected ConnectionManager connectionManager;
 
     protected BusinessDAO() {
         connectionManager = new ConnectionManager();
@@ -150,15 +149,15 @@ public class BusinessDAO extends DestinationDAO {
                     updateStmt.setString(2, updateValue);
                     Business.setIndustry(updateValue);
                     break;
-                case "businessname":
+                case "name":
                     updateStmt.setString(2, updateValue);
                     Business.setName(updateValue);
                     break;
-                case "address building":
+                case "addressbuilding":
                     updateStmt.setString(2, updateValue);
                     Business.setAddressBuilding(updateValue);
                     break;
-                case "address st name":
+                case "addressstname":
                     updateStmt.setString(2, updateValue);
                     Business.setAddressStreet(updateValue);
                     break;
@@ -174,7 +173,7 @@ public class BusinessDAO extends DestinationDAO {
                     updateStmt.setInt(2, Integer.parseInt(updateValue));
                     Business.setZipCode(Integer.parseInt(updateValue));
                     break;
-                case "phone number":
+                case "phonenumber":
                     updateStmt.setLong(2, Long.parseLong(updateValue));
                     Business.setPhoneNumber(Long.parseLong(updateValue));
                     break;

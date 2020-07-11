@@ -1,52 +1,53 @@
 package nyc.dal;
 
-import nyc.model.Violation;
+import nyc.model.Trip;
 import nyc.tools.ConnectionManager;
 
 import java.sql.*;
 
-public class ViolationDAO {
+public class TripDAO {
+    // Single pattern: instantiation is limited to one object.
+    private static TripDAO instance = null;
     protected ConnectionManager connectionManager;
 
-    // Single pattern: instantiation is limited to one object.
-    private static ViolationDAO instance = null;
-
-    protected ViolationDAO() {
+    protected TripDAO() {
         connectionManager = new ConnectionManager();
     }
 
-    public static ViolationDAO getInstance() {
+    public static TripDAO getInstance() {
         if (instance == null) {
-            instance = new ViolationDAO();
+            instance = new TripDAO();
         }
         return instance;
     }
-    public Violation create(Violation Violation) throws SQLException {
-        String insertViolation =
-                "INSERT INTO violation(latitude, longitude, violationtype) " +
-                        "VALUES(?,?,?);";
+
+    public Trip create(Trip Trip) throws SQLException {
+        String insertTrip =
+                "INSERT INTO trip(start_date, end_date, user_username, destination_destinationpk) " +
+                        "VALUES(?,?,?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         ResultSet resultKey = null;
         try {
             connection = connectionManager.getConnection();
-            insertStmt = connection.prepareStatement(insertViolation,
+            insertStmt = connection.prepareStatement(insertTrip,
                     Statement.RETURN_GENERATED_KEYS);
-            insertStmt.setFloat(1, Violation.getLat());
-            insertStmt.setFloat(2, Violation.getLng());
-            insertStmt.setString(3, Violation.getType().name());
+            insertStmt.setTimestamp(1, new Timestamp(Trip.getStart().getTime()));
+            insertStmt.setTimestamp(2, new Timestamp(Trip.getEnd().getTime()));
+            insertStmt.setString(3, Trip.getUserID());
+            insertStmt.setInt(4, Trip.getDestinationID());
             insertStmt.executeUpdate();
 
             // Retrieve the auto-generated key and set it, so it can be used by the caller.
             resultKey = insertStmt.getGeneratedKeys();
-            int ViolationID = -1;
+            int TripID = -1;
             if (resultKey.next()) {
-                ViolationID = resultKey.getInt(1);
+                TripID = resultKey.getInt(1);
             } else {
                 throw new SQLException("Unable to retrieve auto-generated key.");
             }
-            Violation.setKey(ViolationID);
-            return Violation;
+            Trip.setKey(TripID);
+            return Trip;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -64,31 +65,35 @@ public class ViolationDAO {
     }
 
     /**
-     * Gets the Violation from Mysql by Violation Name
+     * Gets the Trip from Mysql by Trip Name
+     *
      * @param
      * @return
      * @throws SQLException
      */
-    public Violation getViolationByViolationID(long ViolationID) throws SQLException {
-        String selectViolation =
-                "SELECT ViolationPK, Latitude, Longitude, violationType " +
-                        "FROM violation " +
-                        "WHERE ViolationPK=?;";
+    public Trip getTripByTripID(long TripID) throws SQLException {
+        String selectTrip =
+                "SELECT trippk, start_date, end_date, user_username, destination_destinationpk " +
+                        "FROM trip " +
+                        "WHERE TripPK=?;";
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
         try {
             connection = connectionManager.getConnection();
-            selectStmt = connection.prepareStatement(selectViolation);
-            selectStmt.setLong(1, ViolationID);
+            selectStmt = connection.prepareStatement(selectTrip);
+            selectStmt.setLong(1, TripID);
             results = selectStmt.executeQuery();
             if (results.next()) {
-                long ViolationKey = results.getLong("violationpk");
-                float lat = results.getFloat("latitude");
-                float lng = results.getFloat("longitude");
-                Violation.ViolationType type = Violation.ViolationType.valueOf(results.getString("type"));
-               Violation violation = new Violation(ViolationKey, lat, lng, type);
-               return violation;
+                int TripKey = results.getInt("trippk");
+//                trippk, start_date, end_date, user_username, destination_destinationpk
+                Date start = results.getDate("start_date");
+                Date end = results.getDate("end_date");
+                String user = results.getString("user_username");
+                int destID = results.getInt("destination_destinationpk");
+                Trip trip = new Trip(start, end, user, destID);
+                trip.setKey(TripKey);
+                return trip;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,43 +114,49 @@ public class ViolationDAO {
 
     /**
      * Updates the companies description
-     * @param Violation
+     *
+     * @param Trip
      * @param
      * @return
      * @throws SQLException
      */
-    public Violation updateCOL(Violation Violation, String columnName, String updateValue) throws SQLException {
-        String updateViolation = "UPDATE violation SET ?=? WHERE violationpk=?;";
+    public Trip updateCOL(Trip Trip, String columnName, String updateValue) throws SQLException {
+        String updateTrip = "UPDATE trip SET ?=? WHERE TripPK=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
         try {
             connection = connectionManager.getConnection();
-            updateStmt = connection.prepareStatement(updateViolation);
+            updateStmt = connection.prepareStatement(updateTrip);
             updateStmt.setString(1, columnName);
-            updateStmt.setLong(3, Violation.getKey());
+            updateStmt.setLong(3, Trip.getKey());
             updateStmt.executeUpdate();
 
-            switch(columnName) {
-                case "lat":
-                    updateStmt.setFloat(2, Float.parseFloat(updateValue));
-                    Violation.setLat(Float.parseFloat(updateValue));
-                    break;
-                case "lng":
-                    updateStmt.setFloat(2, Float.parseFloat(updateValue));
-                    Violation.setLng(Float.parseFloat(updateValue));
-                    break;
+            switch (columnName) {
+
                 case "key":
                     updateStmt.setLong(2, Long.parseLong(updateValue));
-                    Violation.setKey(Long.parseLong(updateValue));
+                    Trip.setKey(Integer.parseInt(updateValue));
                     break;
-                case "type":
+                case "start":
+                    updateStmt.setTimestamp(2, Timestamp.valueOf(updateValue));
+                    Trip.setStart(Timestamp.valueOf(updateValue));
+                    break;
+                case "end":
+                    updateStmt.setTimestamp(2, Timestamp.valueOf(updateValue));
+                    Trip.setEnd(Timestamp.valueOf(updateValue));
+                    break;
+                case "user":
                     updateStmt.setString(2, updateValue);
-                    Violation.setType(nyc.model.Violation.ViolationType.valueOf(updateValue));
+                    Trip.setUserID(updateValue);
+                    break;
+                case "destination":
+                    updateStmt.setInt(2, Integer.parseInt(updateValue));
+                    Trip.setDestinationID(Integer.parseInt(updateValue));
                     break;
                 default:
                     throw new SQLException("COl [" + columnName + "] not found");
             }
-            return Violation;
+            return Trip;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -160,22 +171,23 @@ public class ViolationDAO {
     }
 
     /**
-     * Deletes the Violation from the database
-     * @param Violation
+     * Deletes the Trip from the database
+     *
+     * @param Trip
      * @return
      * @throws SQLException
      */
-    public Violation delete(Violation Violation) throws SQLException {
-        String deleteViolation = "DELETE FROM violation WHERE violationpk=?;";
+    public Trip delete(Trip Trip) throws SQLException {
+        String deleteTrip = "DELETE FROM violation WHERE violationpk=?;";
         Connection connection = null;
         PreparedStatement deleteStmt = null;
         try {
             connection = connectionManager.getConnection();
-            deleteStmt = connection.prepareStatement(deleteViolation);
-            deleteStmt.setLong(1, Violation.getKey());
+            deleteStmt = connection.prepareStatement(deleteTrip);
+            deleteStmt.setLong(1, Trip.getKey());
             deleteStmt.executeUpdate();
 
-            // Return null so the caller can no longer operate on the Violations instance.
+            // Return null so the caller can no longer operate on the Trips instance.
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -189,7 +201,6 @@ public class ViolationDAO {
             }
         }
     }
-    
 
 
 }

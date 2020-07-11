@@ -4,7 +4,6 @@ import nyc.dal.*;
 import nyc.model.*;
 
 import java.io.*;
-import java.security.cert.CertificateRevokedException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -250,7 +249,7 @@ public class Uploader {
             try {
 //                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
-                float lat=0.0F, lng = 0.0F;
+                float lat = 0.0F, lng = 0.0F;
                 if (!data[5].isEmpty()) {
                     lat = Float.parseFloat(data[5]);
                 }
@@ -315,7 +314,7 @@ public class Uploader {
             try {
 //                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
-                float lat=0.0F, lng = 0.0F;
+                float lat = 0.0F, lng = 0.0F;
                 if (!data[5].isEmpty()) {
                     lat = Float.parseFloat(data[5]);
                 }
@@ -373,7 +372,7 @@ public class Uploader {
             try {
 //                System.out.println("Parsing row: " + row);
                 String[] data = row.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // doesnt split , inside quotes
-                float lat=0.0F, lng = 0.0F;
+                float lat = 0.0F, lng = 0.0F;
                 if (!data[10].isEmpty()) {
                     lat = Float.parseFloat(data[10]);
                 }
@@ -626,7 +625,7 @@ public class Uploader {
 
                 float lat = getLatFromPoint(data[3]);
                 float lng = getLongFromPoint(data[3]);
-                String name = data[0];
+                String name = data[14];
                 String borough = standardizeBorough(data[8]);
 
                 int sideOfStreet = data[4].isEmpty() ? 0 : Integer.parseInt(data[4].replaceAll("\\.[0-9]+", ""));

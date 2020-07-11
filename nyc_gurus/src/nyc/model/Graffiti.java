@@ -9,7 +9,7 @@ public class Graffiti extends Violation {
     protected int ZipCode;
     protected Date created;
 
-    public Graffiti(long key, float lat, float lng,  String incidentAddress, String borough, int zipCode, Date created) {
+    public Graffiti(long key, float lat, float lng, String incidentAddress, String borough, int zipCode, Date created) {
         super(key, lat, lng, ViolationType.graffiti);
         IncidentAddress = incidentAddress;
         Borough = borough;

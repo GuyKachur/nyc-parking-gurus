@@ -8,11 +8,15 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Create a Point of Interest </title>
+    <title>Update a Point of Interest </title>
 </head>
 <body>
-<h1>Create Point of Interest</h1>
-<form action="create?object=point_of_interest" method="post">
+<h1>Update Point of Interest</h1>
+<form action="update?object=point_of_interest" method="post">
+    <p>
+        <label for="id">ID</label>
+        <input id="id" name="id" value="">
+    </p>
     <p>
         <label for="lat">Latitude</label>
         <input id="lat" name="lat" value="">
@@ -35,7 +39,7 @@
     </p>
     <p>
         <label for="type">Type</label>
-        <input id="type" name="side_of_street" type="">
+        <input id="type" name="type" type="">
     </p>
     <p>
         <input type="submit">

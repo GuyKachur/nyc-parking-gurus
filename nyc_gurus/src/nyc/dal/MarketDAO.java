@@ -7,10 +7,9 @@ import nyc.tools.ConnectionManager;
 import java.sql.*;
 
 public class MarketDAO extends DestinationDAO {
-    protected ConnectionManager connectionManager;
-
     // Single pattern: instantiation is limited to one object.
     private static MarketDAO instance = null;
+    protected ConnectionManager connectionManager;
 
     protected MarketDAO() {
         connectionManager = new ConnectionManager();
@@ -63,7 +62,8 @@ public class MarketDAO extends DestinationDAO {
             }
         }
     }
-//marketpk, createddate, accountname, tradename, address, city, state, zipcode, phone, email, market, markettype
+
+    //marketpk, createddate, accountname, tradename, address, city, state, zipcode, phone, email, market, markettype
     public Market getMarketByMarketID(long MarketID) throws SQLException {
         String selectMarket =
                 "SELECT MarketPK, AccountName, TradeName, Address, City, State, zipcode, phone, email, market, marketType, Latitude, Longitude " +
@@ -148,7 +148,7 @@ public class MarketDAO extends DestinationDAO {
                     updateStmt.setString(2, updateValue);
                     Market.setType(Destination.destinationType.valueOf(updateValue));
                     break;
-                    //marketpk, createddate, accountname, tradename, address, city,
+                //marketpk, createddate, accountname, tradename, address, city,
                 // state, zipcode, phone, email, market, markettype
                 case "date":
                     updateStmt.setTimestamp(2, Timestamp.valueOf(updateValue));

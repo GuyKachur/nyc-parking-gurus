@@ -7,10 +7,9 @@ import nyc.tools.ConnectionManager;
 import java.sql.*;
 
 public class CollisionDAO extends ViolationDAO {
-    protected ConnectionManager connectionManager;
-
     // Single pattern: instantiation is limited to one object.
     private static CollisionDAO instance = null;
+    protected ConnectionManager connectionManager;
 
     protected CollisionDAO() {
         connectionManager = new ConnectionManager();

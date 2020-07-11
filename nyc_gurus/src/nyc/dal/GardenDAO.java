@@ -1,7 +1,7 @@
 package nyc.dal;
 
 import nyc.model.Destination;
-import nyc.model.PointOfInterest;
+import nyc.model.Garden;
 import nyc.tools.ConnectionManager;
 
 import java.sql.Connection;
@@ -9,44 +9,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PointOfInterestDAO extends DestinationDAO {
+public class GardenDAO extends DestinationDAO {
+    // Single pattern: instantiation is limited to one object.
+    private static GardenDAO instance = null;
     protected ConnectionManager connectionManager;
 
-    // Single pattern: instantiation is limited to one object.
-    private static PointOfInterestDAO instance = null;
-
-    protected PointOfInterestDAO() {
+    protected GardenDAO() {
         connectionManager = new ConnectionManager();
     }
 
-    public static PointOfInterestDAO getInstance() {
+    public static GardenDAO getInstance() {
         if (instance == null) {
-            instance = new PointOfInterestDAO();
+            instance = new GardenDAO();
         }
         return instance;
     }
 
-    public PointOfInterest create(PointOfInterest PointOfInterest) throws SQLException {
-        Destination DestPointOfInterest = new Destination(PointOfInterest.getKey(), PointOfInterest.getLat(), PointOfInterest.getLng(), PointOfInterest.getType());
-        create(DestPointOfInterest);
-        PointOfInterest.setKey(DestPointOfInterest.getKey());
-        String insertPointOfInterest =
-                "INSERT INTO point_of_interest(point_of_interestpk, side_of_street, borough, poitype, name)" +
-                        "VALUES(?,?,?,?,?);";
+    public Garden create(Garden Garden) throws SQLException {
+        Destination DestGarden = new Destination(Garden.getKey(), Garden.getLat(), Garden.getLng(), Garden.getType());
+        create(DestGarden);
+        Garden.setKey(DestGarden.getKey());
+        String insertGarden =
+                "INSERT INTO garden(gardenpk, name, address, neighborhood_name, zipcode, borough)" +
+                        "VALUES(?,?,?,?,?,?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         ResultSet resultKey = null;
         try {
             connection = connectionManager.getConnection();
-            insertStmt = connection.prepareStatement(insertPointOfInterest);
-            insertStmt.setFloat(1, PointOfInterest.getKey());
-            insertStmt.setInt(2, PointOfInterest.getSideOfStreet());
-            insertStmt.setString(3, PointOfInterest.getBorough());
-            insertStmt.setString(4, PointOfInterest.getPOIType());
-            insertStmt.setString(5, PointOfInterest.getName());
-
+            insertStmt = connection.prepareStatement(insertGarden);
+            insertStmt.setFloat(1, Garden.getKey());
+            insertStmt.setString(2, Garden.getName());
+            insertStmt.setString(3, Garden.getAddress());
+            insertStmt.setString(4, Garden.getNeighborhood_name());
+            insertStmt.setInt(5, Garden.getZipCode());
+            insertStmt.setString(6, Garden.getBorough());
             insertStmt.executeUpdate();
-            return PointOfInterest;
+            return Garden;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -60,33 +59,37 @@ public class PointOfInterestDAO extends DestinationDAO {
         }
     }
 
-    public PointOfInterest getPointOfInterestByPointOfInterestID(long PointOfInterestID) throws SQLException {
-        String selectPointOfInterest =
-                "SELECT point_of_interestpk, side_of_street, borough, poitype, name, Longitude, Latitude " +
-                        "FROM point_of_interest " +
-                        "JOIN destination d on point_of_interest.Point_of_InterestPK = d.DestinationPK " +
-                        "WHERE Point_of_InterestPK=?;";
+    //gardenpk, gardentype, name, address, neighborhood_name, zipcode, borough
+    public Garden getGardenByGardenID(long GardenID) throws SQLException {
+        String selectGarden =
+                "SELECT GardenPK, gardenType, name, address, neighborhood_name, zipcode, borough, Latitude, Longitude " +
+                        "FROM garden " +
+                        "JOIN destination d on garden.GardenPK = d.DestinationPK " +
+                        "WHERE GardenPK=?;";
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
         try {
             connection = connectionManager.getConnection();
-            selectStmt = connection.prepareStatement(selectPointOfInterest);
-            selectStmt.setLong(1, PointOfInterestID);
+            selectStmt = connection.prepareStatement(selectGarden);
+            selectStmt.setLong(1, GardenID);
             results = selectStmt.executeQuery();
             if (results.next()) {
-
-                long PointOfInterestKey = results.getLong("point_of_interestpk");
+                long GardenKey = results.getLong("GardenPK");
                 float lat = results.getFloat("Latitude");
                 float lng = results.getFloat("Longitude");
 
+                String gardenType = results.getString("gardenType");
+                String neighborhood_name = results.getString("neighborhood_name");
+                String address = results.getString("address");
                 String name = results.getString("name");
-                String poitype = results.getString("poitype");
+                String city = results.getString("city");
+                String state = results.getString("state");
                 String borough = results.getString("borough");
 
-                int sideOfStreet = results.getInt("side_of_street");
-                PointOfInterest PointOfInterest = new PointOfInterest(PointOfInterestKey, lat, lng, name, borough, sideOfStreet, poitype);
-                return PointOfInterest;
+                int zip = results.getInt("zipcode");
+                Garden Garden = new Garden(GardenKey, lat, lng, name, zip, address, neighborhood_name, borough);
+                return Garden;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,56 +108,60 @@ public class PointOfInterestDAO extends DestinationDAO {
         return null;
     }
 
-    public PointOfInterest updateCOL(PointOfInterest PointOfInterest, String columnName, String updateValue) throws SQLException {
-        String updatePointOfInterest = "UPDATE point_of_interest SET ?=? WHERE Point_of_InterestPK=?;";
+    public Garden updateCOL(Garden Garden, String columnName, String updateValue) throws SQLException {
+        String updateGarden = "UPDATE garden SET ?=? WHERE GardenPK=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
         try {
             connection = connectionManager.getConnection();
-            updateStmt = connection.prepareStatement(updatePointOfInterest);
+            updateStmt = connection.prepareStatement(updateGarden);
             updateStmt.setString(1, columnName);
 
-            updateStmt.setLong(3, PointOfInterest.getKey());
+            updateStmt.setLong(3, Garden.getKey());
             updateStmt.executeUpdate();
 
             switch (columnName) {
                 case "lat":
                     updateStmt.setFloat(2, Float.parseFloat(updateValue));
-                    PointOfInterest.setLat(Float.parseFloat(updateValue));
+                    Garden.setLat(Float.parseFloat(updateValue));
                     break;
                 case "lng":
                     updateStmt.setFloat(2, Float.parseFloat(updateValue));
-                    PointOfInterest.setLng(Float.parseFloat(updateValue));
+                    Garden.setLng(Float.parseFloat(updateValue));
                     break;
                 case "key":
                     updateStmt.setLong(2, Long.parseLong(updateValue));
-                    PointOfInterest.setKey(Long.parseLong(updateValue));
+                    Garden.setKey(Long.parseLong(updateValue));
                     break;
                 case "type":
                     updateStmt.setString(2, updateValue);
-                    PointOfInterest.setType(Destination.destinationType.valueOf(updateValue));
-                    break;
-                case "poitype":
-                    updateStmt.setString(2, updateValue);
-                    PointOfInterest.setPOIType(updateValue);
+                    Garden.setType(Destination.destinationType.valueOf(updateValue));
                     break;
                 case "name":
                     updateStmt.setString(2, updateValue);
-                    PointOfInterest.setName(updateValue);
+                    Garden.setName(updateValue);
                     break;
-                case "side_of_street":
+                case "address":
+                    updateStmt.setString(2, updateValue);
+                    Garden.setAddress(updateValue);
+                    break;
+                case "neighborhood_name":
+                    updateStmt.setString(2, updateValue);
+                    Garden.setNeighborhood_name(updateValue);
+                    break;
+                case "zipcode":
                     updateStmt.setInt(2, Integer.parseInt(updateValue));
-                    PointOfInterest.setSideOfStreet(Integer.parseInt(updateValue));
+                    Garden.setZipCode(Integer.parseInt(updateValue));
                     break;
                 case "borough":
                     updateStmt.setString(2, updateValue);
-                    PointOfInterest.setBorough(updateValue);
+                    Garden.setBorough(updateValue);
                     break;
 
                 default:
                     throw new SQLException("COl [" + columnName + "] not found");
             }
-            return PointOfInterest;
+            return Garden;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -169,23 +176,23 @@ public class PointOfInterestDAO extends DestinationDAO {
     }
 
     /**
-     * Deletes the PointOfInterest from the database
+     * Deletes the Garden from the database
      *
-     * @param PointOfInterest
+     * @param Garden
      * @return
      * @throws SQLException
      */
-    public PointOfInterest delete(PointOfInterest PointOfInterest) throws SQLException {
-        String deletePointOfInterest = "DELETE FROM point_of_interest WHERE Point_of_InterestPK=?;";
+    public Garden delete(Garden Garden) throws SQLException {
+        String deleteGarden = "DELETE FROM garden WHERE GardenPK=?;";
         Connection connection = null;
         PreparedStatement deleteStmt = null;
         try {
             connection = connectionManager.getConnection();
-            deleteStmt = connection.prepareStatement(deletePointOfInterest);
-            deleteStmt.setLong(1, PointOfInterest.getKey());
+            deleteStmt = connection.prepareStatement(deleteGarden);
+            deleteStmt.setLong(1, Garden.getKey());
             deleteStmt.executeUpdate();
 
-            // Return null so the caller can no longer operate on the PointOfInterests instance.
+            // Return null so the caller can no longer operate on the Gardens instance.
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
