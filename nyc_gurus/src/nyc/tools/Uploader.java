@@ -590,22 +590,39 @@ public class Uploader {
         }
         return 0.0F;
     }
+    public String standardizeType(String input) {
+        switch (input.trim().toLowerCase()) {
+            case "1":
+                return "Residential";
+            case "2":
+                return "Education Facility";
+            case "3":
+                return "Cultural Facility";
+            case "4":
+                return "Recreational Facility";
+            case "5":
+                return "Social Services";
+            case "6":
+                return "Transportation Facility";
+            case "7":
+                return "Commercial";
+            case "8":
+                return "Government Facility";
+            case "9":
+                return "Religious Institution";
+            case "10":
+                return "Health Services";
+            case "11":
+                return "Public Safety";
+            case "12":
+                return "Water";
+            case "13":
+                return "Miscellaneous";
+            default:
+                return "Unknown";
+        }
 
-    //TODO enum for type?
-    /*1 Residential
-        2 Education Facility
-        3 Cultural Facility
-        4 Recreational Facility
-        5 Social Services
-        6 Transportation Facility
-        7 Commercial
-        8 Government Facility (non public safety)
-        9 Religious Institution
-        10 Health Services
-        11 Public Safety
-        12 Water
-        13 Miscellaneous*/
-
+    }
     public void uploadPointOfInterest() throws IOException {
         PointOfInterestDAO pointOfInterestDAO = PointOfInterestDAO.getInstance();
         BufferedReader csvReader = new BufferedReader(new FileReader(new File("D:\\GitHub\\nyc-parking-gurus\\nyc_gurus\\extras\\RawData\\POI.csv").getAbsolutePath()));
@@ -629,7 +646,7 @@ public class Uploader {
                 String borough = standardizeBorough(data[8]);
 
                 int sideOfStreet = data[4].isEmpty() ? 0 : Integer.parseInt(data[4].replaceAll("\\.[0-9]+", ""));
-                String POIType = data[10];
+                String POIType = standardizeType(data[10]);
                 PointOfInterest pointOfInterest = new PointOfInterest(0,
                         lat, lng, name, borough, sideOfStreet, POIType);
 //                System.out.println("Parsed into POI: " + pointOfInterest);
