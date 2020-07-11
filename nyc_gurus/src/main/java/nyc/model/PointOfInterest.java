@@ -3,7 +3,6 @@ package nyc.model;
 public class PointOfInterest extends Destination {
     protected String name;
     protected String borough;
-    protected String domain;
     protected int sideOfStreet;
     protected String POIType;
 

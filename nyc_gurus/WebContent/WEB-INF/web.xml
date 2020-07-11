@@ -4,6 +4,10 @@
   <welcome-file-list>
     <welcome-file>FindUsers.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>createpark</servlet-name>
+    <servlet-class>nyc.model.dal.park.create</servlet-class>
+  </servlet>
   <!--
   <servlet>
     <servlet-name>FindUsers</servlet-name>
