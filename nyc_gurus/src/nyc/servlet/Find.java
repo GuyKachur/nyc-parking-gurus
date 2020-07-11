@@ -140,10 +140,10 @@ public class Find extends HttpServlet {
                         messages.put("success", "Found Point Of Interest: " + point.getKey());
                         req.setAttribute("point_of_interest", point);
                     } else {
-                        //find by name
                         List<PointOfInterest> points = FindPointsOfInterest(name);
+                        messages.put("success", "Found Points Of Interest containing : " + name);
+                        req.setAttribute("points_of_interest", points);
                     }
-
                     break;
                 case "collision":
                     Collision collision = FindCollision(req);
@@ -165,7 +165,7 @@ public class Find extends HttpServlet {
             }
 
         }
-        //TODO check this? -> should map the to file names?
+        //TODO check this? -> should map the to file names? or should just end each break statement with this
         req.getRequestDispatcher("/Find?object=" + databaseObject + ".jsp").forward(req, resp);
 
     }
