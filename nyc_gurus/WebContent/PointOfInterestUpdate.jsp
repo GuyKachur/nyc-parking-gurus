@@ -12,19 +12,19 @@
 </head>
 <body>
 <h1>Update Point of Interest</h1>
-<form action="update?object=point_of_interest" method="post">
+<form action="update" method="post">
     <p>
         <label for="id">ID</label>
-        <input id="id" name="id" value="">
+        <input id="id" name="id" value="${fn:escapeXml(param.id)}" readonly>
     </p>
-    <p>
-        <label for="lat">Latitude</label>
-        <input id="lat" name="lat" value="">
-    </p>
-    <p>
-        <label for="lng">Longitude</label>
-        <input id="lng" name="lng" value="">
-    </p>
+<!--     <p> -->
+<!--         <label for="lat">Latitude</label> -->
+<!--         <input id="lat" name="lat" value=""> -->
+<!--     </p> -->
+<!--     <p> -->
+<!--         <label for="lng">Longitude</label> -->
+<!--         <input id="lng" name="lng" value=""> -->
+<!--     </p> -->
     <p>
         <label for="name">Name</label>
         <input id="name" name="name" value="">
@@ -42,6 +42,7 @@
         <input id="type" name="type" value="">
     </p>
     <p>
+        <input id="object" name="object" value="point_of_interest" style="display:none">
         <input type="submit">
     </p>
 </form>

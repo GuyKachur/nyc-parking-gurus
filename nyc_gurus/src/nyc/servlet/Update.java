@@ -14,8 +14,10 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -102,6 +104,7 @@ public class Update extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+    	System.out.println("Post: " + req.getQueryString());
         // Map for storing messages.
         Map<String, String> messages = new HashMap<String, String>();
         req.setAttribute("messages", messages);
@@ -137,9 +140,14 @@ public class Update extends HttpServlet {
 //                    }
 //                    break;
                 case "point_of_interest":
-                    if (UpdatePointOfInterest(req)) {
-                        messages.put("success", "Updated Point Of Interest");
+                	PointOfInterest updatedPoint = UpdatePointOfInterest(req);
+                    if (updatedPoint != null) {
+                        messages.put("success", "Updated Point Of Interest -> " + updatedPoint.getName());
+                        List<PointOfInterest> points = new ArrayList<>();
+                        points.add(updatedPoint);
+                        req.setAttribute("points_of_interest", points );
                     }
+                    req.getRequestDispatcher("PointOfInterestFind.jsp").forward(req, resp);
                     break;
 //                case "collision":
 //                    if (UpdateCollision(req)) {
@@ -162,7 +170,7 @@ public class Update extends HttpServlet {
 
         }
         //TODO check this? -> should map the to file names?
-        req.getRequestDispatcher("/update?object=" + databaseObject + ".jsp").forward(req, resp);
+//        req.getRequestDispatcher("/update?object=" + databaseObject + ".jsp").forward(req, resp);
 
     }
 
@@ -223,27 +231,43 @@ public class Update extends HttpServlet {
         return lngValue;
     }
 
-    private boolean UpdatePointOfInterest(HttpServletRequest req) throws IOException {
+    private PointOfInterest UpdatePointOfInterest(HttpServletRequest req) throws IOException {
+    	System.out.println("A: " + req.getQueryString());
         String stringID = req.getParameter("id");
-        String stringLat = req.getParameter("lat");
-        String stringLng = req.getParameter("lng");
+//        String stringLat = req.getParameter("lat");
+//        String stringLng = req.getParameter("lng");
         String name = req.getParameter("name");
         String borough = req.getParameter("borough");
         String stringSideOfStreet = req.getParameter("side_of_street");
         String poiType = req.getParameter("type");
         try {
             PointOfInterest point = pointOfInterestDAO.getPointOfInterestByPointOfInterestID(fixLong(stringID));
-            pointOfInterestDAO.updateCOL(point, "lat", stringLat);
-            pointOfInterestDAO.updateCOL(point, "lng", stringLng);
-            pointOfInterestDAO.updateCOL(point, "type", stringLat);
-            pointOfInterestDAO.updateCOL(point, "name", stringLat);
-            pointOfInterestDAO.updateCOL(point, "borough", stringLat);
-            pointOfInterestDAO.updateCOL(point, "side_of_street", stringLat);
+            if(point != null) {
+//            	if(stringLat != null && !stringLat.trim().isEmpty()) {
+//                    pointOfInterestDAO.updateCOL(point, "Latitude", stringLat);
+//            	}
+//            	if(stringLng != null && !stringLng.trim().isEmpty()) {
+//                    pointOfInterestDAO.updateCOL(point, "Longitude", stringLng);
+//            	}
+            	if(poiType != null && !poiType.trim().isEmpty()) {
+                    point = pointOfInterestDAO.updateCOL(point, "POIType", poiType);
+            	}
+            	if(name != null && !name.trim().isEmpty()) {
+            		System.out.println("Updating name: ");
+            		point =  pointOfInterestDAO.updateCOL(point, "name", name);
+            	}
+            	if(borough != null && !borough.trim().isEmpty()) {
+            		point = pointOfInterestDAO.updateCOL(point, "borough", borough);
+            	}
+            	if(stringSideOfStreet != null && !stringSideOfStreet.trim().isEmpty()) {
+            		point = pointOfInterestDAO.updateCOL(point, "side_of_street", stringSideOfStreet);
+            	}
+            }
+            return point;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new IOException(e);
         }
-        return true;
     }
 
     private boolean UpdateAirBNB(HttpServletRequest req) throws IOException {

@@ -107,56 +107,58 @@ public class PointOfInterestDAO extends DestinationDAO {
     }
 
     public PointOfInterest updateCOL(PointOfInterest PointOfInterest, String columnName, String updateValue) throws SQLException {
-        String updatePointOfInterest = "UPDATE point_of_interest SET ?=? WHERE Point_of_InterestPK=?;";
+        String updatePointOfInterest = "UPDATE point_of_interest SET "+ columnName +"=? WHERE Point_of_InterestPK=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
         try {
             connection = connectionManager.getConnection();
             updateStmt = connection.prepareStatement(updatePointOfInterest);
-            updateStmt.setString(1, columnName);
+//            updateStmt.setString(1, columnName);
 
-            updateStmt.setLong(3, PointOfInterest.getKey());
-            updateStmt.executeUpdate();
+            updateStmt.setLong(2, PointOfInterest.getKey());
+
 
             switch (columnName) {
-                case "lat":
-                    updateStmt.setFloat(2, Float.parseFloat(updateValue));
+                case "Latitude":
+                    updateStmt.setFloat(1, Float.parseFloat(updateValue));
                     PointOfInterest.setLat(Float.parseFloat(updateValue));
                     break;
-                case "lng":
-                    updateStmt.setFloat(2, Float.parseFloat(updateValue));
+                case "Longitude":
+                    updateStmt.setFloat(1, Float.parseFloat(updateValue));
                     PointOfInterest.setLng(Float.parseFloat(updateValue));
                     break;
                 case "key":
-                    updateStmt.setLong(2, Long.parseLong(updateValue));
+                    updateStmt.setLong(1, Long.parseLong(updateValue));
                     PointOfInterest.setKey(Long.parseLong(updateValue));
                     break;
                 case "type":
-                    updateStmt.setString(2, updateValue);
+                    updateStmt.setString(1, updateValue);
                     PointOfInterest.setType(Destination.destinationType.valueOf(updateValue));
                     break;
-                case "poitype":
-                    updateStmt.setString(2, updateValue);
+                case "POIType":
+                    updateStmt.setString(1, updateValue);
                     PointOfInterest.setPOIType(updateValue);
                     break;
                 case "name":
-                    updateStmt.setString(2, updateValue);
+                    updateStmt.setString(1, updateValue);
                     PointOfInterest.setName(updateValue);
                     break;
                 case "side_of_street":
-                    updateStmt.setInt(2, Integer.parseInt(updateValue));
+                    updateStmt.setInt(1, Integer.parseInt(updateValue));
                     PointOfInterest.setSideOfStreet(Integer.parseInt(updateValue));
                     break;
                 case "borough":
-                    updateStmt.setString(2, updateValue);
+                    updateStmt.setString(1, updateValue);
                     PointOfInterest.setBorough(updateValue);
                     break;
 
                 default:
                     throw new SQLException("COl [" + columnName + "] not found");
             }
+            updateStmt.executeUpdate();
             return PointOfInterest;
         } catch (SQLException e) {
+        	System.out.println(updateStmt);
             e.printStackTrace();
             throw e;
         } finally {

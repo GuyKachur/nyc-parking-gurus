@@ -140,6 +140,7 @@ public class Create extends HttpServlet {
                     if (createPointOfInterest(req)) {
                         messages.put("success", "Created Point Of Interest");
                     }
+                    req.getRequestDispatcher("/PointOfInterestFind.jsp").forward(req, resp);
                     break;
                 case "collision":
                     if (createCollision(req)) {
