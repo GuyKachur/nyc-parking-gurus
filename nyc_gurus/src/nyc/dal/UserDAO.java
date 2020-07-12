@@ -54,22 +54,38 @@ public class UserDAO {
 	}
 	
 	/**
-	 * Update the password hash of the User instance.
+	 * Update the column of a User instance.
 	 * This runs a UPDATE statement.
 	 */
-	public User updatePasswordHash(User user, String newPasswordHash) throws SQLException {
-		String updateUser = "UPDATE User SET PasswordHash=? WHERE UserName=?;";
+	public User updateUser(User user, String colName, String newValue) throws SQLException {
+		String updateUser = "UPDATE User SET " + colName + "=? WHERE UserName=?;";
 		Connection connection = null;
 		PreparedStatement updateStmt = null;
 		try {
 			connection = connectionManager.getConnection();
 			updateStmt = connection.prepareStatement(updateUser);
-			updateStmt.setString(1, newPasswordHash);
+			updateStmt.setString(1, newValue);
 			updateStmt.setString(2, user.getUserName());
 			updateStmt.executeUpdate();
 
 			// Update the User param before returning to the caller.
-			user.setPasswordHash(newPasswordHash);
+			switch (colName.toLowerCase()) {
+				case "username":
+					user.setUserName(newValue);
+					break;
+				case "passwordhash":
+					user.setPasswordHash(newValue);
+					break;
+				case "firstname":
+					user.setFirstName(newValue);
+					break;
+				case "lastname":
+					user.setLastName(newValue);
+					break;
+				default:
+					throw new SQLException("COl [" + colName + "] not found");
+					
+			}
 			return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -118,7 +134,7 @@ public class UserDAO {
 	 * This runs a SELECT statement and returns a single Company instance.
 	 */
 	public User getUserByUserName(String userName) throws SQLException {
-		String selectUser = "SELECT Username,passwordhash FROM User WHERE Username=?;";
+		String selectUser = "SELECT UserName, PasswordHash, FirstName, LastName FROM User WHERE Username=?;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;
