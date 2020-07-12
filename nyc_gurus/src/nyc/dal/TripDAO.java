@@ -4,6 +4,8 @@ import nyc.model.Trip;
 import nyc.tools.ConnectionManager;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TripDAO {
     // Single pattern: instantiation is limited to one object.
@@ -111,6 +113,51 @@ public class TripDAO {
         }
         return null;
     }
+    
+    /**
+	 * Get the all the Trips for a username.
+	 */
+	public List<Trip> getTripsByUserName(String userName) throws SQLException {
+		List<Trip> trips = new ArrayList<Trip>();
+		String selectTrips =
+            "SELECT trippk, start_date, end_date, user_username, destination_destinationpk " +
+            "FROM Trip " +
+            "WHERE User_Username=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectTrips);
+			selectStmt.setString(1, userName);
+			results = selectStmt.executeQuery();
+			while(results.next()) {
+				int tripKey = results.getInt("TripPK");
+				Date startDate = results.getDate("start_date");
+				Date endDate = results.getDate("end_date");
+				String user = results.getString("User_username");
+				int dest = results.getInt("Destination_DestinationPK");
+				
+				
+				Trip trip = new Trip(tripKey, startDate, endDate, user, dest);
+				trips.add(trip);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if(connection != null) {
+				connection.close();
+			}
+			if(selectStmt != null) {
+				selectStmt.close();
+			}
+			if(results != null) {
+				results.close();
+			}
+		}
+		return trips;
+	}
 
     /**
      * Updates the companies description
