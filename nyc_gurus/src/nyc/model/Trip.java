@@ -9,7 +9,15 @@ public class Trip {
     protected String userName;
     protected int destinationID;
 
-    public Trip(Date start, Date end, String userID, int destinationID) {
+    public Trip(int key, Date start, Date end, String userName, int destinationID) {
+		this.key = key;
+		this.start = start;
+		this.end = end;
+		this.userName = userName;
+		this.destinationID = destinationID;
+	}
+
+	public Trip(Date start, Date end, String userID, int destinationID) {
         this.start = start;
         this.end = end;
         this.userName = userID;
