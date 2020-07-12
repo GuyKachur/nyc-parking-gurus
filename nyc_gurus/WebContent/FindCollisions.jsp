@@ -41,6 +41,8 @@
                 <th>Cyclists Killed</th>
                 <th>Motorsists Injured</th>
                 <th>Motorsists Killed</th>
+                <th>Latitude</th>
+        		<th>Longitude</th>
                 <th>Delete Collision</th>
                 <th>Update Collision</th>
             </tr>
@@ -58,6 +60,8 @@
                     <td><c:out value="${collision.getCyclistsKilled()}" /></td>
                     <td><c:out value="${collision.getMotoristsInjured()}" /></td>
                     <td><c:out value="${collision.getMotoristsKilled()}" /></td>
+                    <td><c:out value="${collision.getLat()}" /></td>
+                    <td><c:out value="${collision.getLng()}" /></td>
                     <td><a href="collisiondelete?collisionpk=<c:out value="${collision.getKey()}"/>">Delete</a></td>
                     <td><a href="collisionupdate?collisionpk=<c:out value="${collision.getKey()}"/>">Update</a></td>
                 </tr>

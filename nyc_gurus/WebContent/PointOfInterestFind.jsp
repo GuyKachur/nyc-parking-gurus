@@ -39,6 +39,8 @@
         <th>Borough</th>
         <th>Type</th>
         <th>ID</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
         <th>Delete Point</th>
         <th>Update Point</th>
     </tr>
@@ -47,8 +49,10 @@
             <td><c:out value="${PointOfInterest.getName()}"/></td>
             <td><c:out value="${PointOfInterest.getSideOfStreet()}"/></td>
             <td><c:out value="${PointOfInterest.getBorough()}"/></td>
-            <td><c:out value="${PointOfInterest.getType()}"/></td>
+            <td><c:out value="${PointOfInterest.getPOIType()}"/></td>
             <td><c:out value="${PointOfInterest.getKey()}"/></td>
+            <td><c:out value="${PointOfInterest.getLat()}"/></td>
+             <td><c:out value="${PointOfInterest.getLng()}"/></td>
             <td><a href="delete?object=point_of_interest&id=<c:out value="${PointOfInterest.getKey()}"/>">Delete</a>
             </td>
             <td><a href="update?object=point_of_interest&id=<c:out value="${PointOfInterest.getKey()}"/>">Update</a>

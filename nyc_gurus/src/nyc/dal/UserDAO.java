@@ -114,7 +114,7 @@ public class UserDAO {
 			deleteStmt.setString(1, user.getUserName());
 			deleteStmt.executeUpdate();
 
-			// Return null so the caller can no longer operate on the Persons instance.
+			// Return null so the caller can no longer operate on the User instance.
 			return null;
 		} catch (SQLException e) {
 			e.printStackTrace();

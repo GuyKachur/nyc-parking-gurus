@@ -53,15 +53,15 @@ public class insert {
     public static void main(String[] args) {
         Uploader up = new Uploader();
         try {
-            up.uploadAirBnb();
-            up.uploadBusiness();
-            up.uploadGarden();
-            up.uploadMarket();
-            up.uploadPark();
+//            up.uploadAirBnb();
+//            up.uploadBusiness();
+//            up.uploadGarden();
+//            up.uploadMarket();
+//            up.uploadPark();
             up.uploadPointOfInterest();
-            up.uploadCollision();
-            up.uploadEmergencyResponse();
-            up.uploadGraffiti();
+//            up.uploadCollision();
+//            up.uploadEmergencyResponse();
+//            up.uploadGraffiti();
 
         } catch (IOException e) {
             e.printStackTrace();

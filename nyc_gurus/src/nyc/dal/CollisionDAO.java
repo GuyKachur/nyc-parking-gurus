@@ -137,10 +137,6 @@ public class CollisionDAO extends ViolationDAO {
                     updateStmt.setFloat(1, Float.parseFloat(updateValue));
                     Collision.setLng(Float.parseFloat(updateValue));
                     break;
-                case "collisionpk":
-                    updateStmt.setLong(1, Long.parseLong(updateValue));
-                    Collision.setKey(Long.parseLong(updateValue));
-                    break;
                 case "date":
                     updateStmt.setTimestamp(1, Timestamp.valueOf(updateValue));
                     Collision.setDate(Date.valueOf(updateValue));
